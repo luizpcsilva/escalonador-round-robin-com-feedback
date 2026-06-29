@@ -1,4 +1,5 @@
-#include "processo/processo.h" 
+//fazendo forward declaration de processo
+typedef struct Processo Processo;
 
 typedef struct ElemFila{
     ElemFila* proximo;
