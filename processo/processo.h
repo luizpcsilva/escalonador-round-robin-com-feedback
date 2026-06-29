@@ -22,7 +22,7 @@ typedef enum{
     SEM_IO
 }tipoIOProcesso;
 
-typedef struct{
+typedef struct Processo{
     int pid;
     int ppid; //indicação do process id do processo pai
     statusProcesso status;
