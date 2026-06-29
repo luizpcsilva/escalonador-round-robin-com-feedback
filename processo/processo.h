@@ -9,11 +9,11 @@ typedef enum{
     TERMINOU
 }statusProcesso;
 
-typedef enum{
-    BAIXA,
-    MEDIA,
-    ALTA
-}prioridadeProcesso;
+//typedef enum{
+//    BAIXA,
+//    MEDIA,
+//    ALTA
+//}prioridadeProcesso;
 
 typedef enum{
     DISCO,
@@ -25,7 +25,7 @@ typedef struct{
     int pid;
     int ppid; //indicação do process id do processo pai
     statusProcesso status;
-    prioridadeProcesso prioridade;
+    int prioridade; //indica a fila de prioridade do processo. 0 é a prioridade maxima
     int momentoIO; //momento em que o processo vai parar para fazer IO
     int tempoIO; //tempo que o processo precisa para fazer IO
     tipoIOProcesso tipoIO;
