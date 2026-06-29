@@ -6,6 +6,8 @@ FilaProcessos* criarFila(){
 
     fila->inicio = NULL;
     fila->fim = NULL;
+
+    return fila;
 }
 
 void enfileirarProcessos(Processo* processoP, FilaProcessos* filaP){
@@ -14,20 +16,37 @@ void enfileirarProcessos(Processo* processoP, FilaProcessos* filaP){
     //caso a fila esteja vazia
     if(filaP->fim == NULL){
         elementoP->proximo = NULL;
+        elementoP->anterior = NULL;
         filaP->inicio = elementoP;
         filaP->fim = elementoP;
     }
     //caso a fila tenha elementos
     else{
+        elementoP->anterior = filaP->fim;
         filaP->fim->proximo = elementoP;
         elementoP->proximo = NULL;
-        filaP->fim = elementoP
+        filaP->fim = elementoP;
+    }
+}
+
+Processo* desenfileirarProcesso(FilaProcessos* filaP){
+    if(filaP->inicio == NULL) return NULL;
+    //atualiza o inicio da fila
+    ElemFila* elementoP = filaP->inicio;
+    filaP->inicio = elementoP->proximo;
+    
+    //testa se a fila ainda tem elementos
+    if(filaP->inicio != NULL){
+        filaP->inicio->anterior = NULL;
+    }
+    else{
+        filaP->fim = NULL; //atualiza o fim caso esteja vazia
     }
 
-Processo* desenfileirarProcesso(FilaProcessos){
-    
+    Processo* processoP = elementoP->processoP;
+    free(elementoP);
+
+    return processoP;
 }
 
 
-
-}

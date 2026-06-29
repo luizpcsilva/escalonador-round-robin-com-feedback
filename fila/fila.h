@@ -3,6 +3,7 @@
 typedef struct ElemFila{
     ElemFila* proximo;
     Processo* processoP;
+    ElemFila* anterior;
 }ElemFila;
 
 typedef struct FilaProcessos{
@@ -14,4 +15,4 @@ FilaProcessos* criarFila();
 
 void enfileirarProcesso(Processo* processoP, FilaProcessos* filaP);
 
-Processo* desenfileirarProcesso(FilaProcessos);
+Processo* desenfileirarProcesso(FilaProcessos* filaP);
