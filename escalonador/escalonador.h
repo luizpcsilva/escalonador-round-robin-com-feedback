@@ -5,6 +5,17 @@ typedef struct Processo Processo;
 
 Processo* getProcessoEmExecucao();
 
+void bootEscalonador();
+
+//aplica a preempsao caso o quantum acabe ou a fatia de tempo do processo em execução acabe
 void aplicaPreempsao();
 
+//bloqueia o processo em execução caso ele solicite IO
+void bloquearProcesso();
+
+//lida com o término de um processo durante sua execucao
+void finalizarProcesso();
+
 void boostPrioridade();
+
+void admitirProcesso(Processo* processoP);
