@@ -48,7 +48,7 @@ void aplicaPreempsao(){
 
 void bloquearProcesso(){
     processoEmExecucao -> status = BLOQUEADO;
-    //TODO: Enviar para fila de IO correspondente
+    enviarParaIo(getProcessoEmExecucao());
     iniciaExecucaoNovoProcesso();
 }
 

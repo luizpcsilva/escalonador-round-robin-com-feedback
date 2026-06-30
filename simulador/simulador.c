@@ -13,7 +13,6 @@ static Processo **arrayProcessos = NULL;
 static FilaProcessos* arrayFilas[QTD_FILAS];
 
 // Estado da CPU
-static Processo *processoAtualCpu = NULL;
 static int quantumPadrao = 0;
 static int quantumRestante = 0;
 
@@ -63,6 +62,7 @@ static void enviarParaIo(Processo *processo) {
 }
 
 static void atualizarProcessoCpu() {
+    Processo* processoAtualCpu = getProcessoEmExecucao();
     if (processoAtualCpu == NULL) return;
     
     executarProcesso(processoAtualCpu);
@@ -71,16 +71,11 @@ static void atualizarProcessoCpu() {
     printf("  CPU: P%d [%d/%d] Q:%d\n", processoAtualCpu->pid, processoAtualCpu->tempoDecorrido, processoAtualCpu->tempoTotal, quantumRestante);
 
     if (processoFinalizado(processoAtualCpu)) {
-        processoAtualCpu->status = TERMINOU;
-        processosFinalizados++;
-        processoAtualCpu = NULL;
+        finalizarProcesso();
     } else if (processoDeveSolicitarIO(processoAtualCpu)) {
-        enviarParaIo(processoAtualCpu);
-        processoAtualCpu = NULL;
+        bloquearProcesso();
     } else if (quantumRestante <= 0) {
-        Processo *aux = processoAtualCpu;
-        processoAtualCpu = NULL;
-        retornarParaEscalonador(aux, RETORNO_PREEMPCAO);
+        aplicarPreempsao();
     }
 }
 
@@ -90,13 +85,9 @@ void inicializarSimulador(int quantidadeProcessos, int quantum, int duracaoDisco
     processosFinalizados = 0;
     quantumPadrao = quantum;
     quantumRestante = 0;
-    processoAtualCpu = NULL;
+    bootEscalonador();
 
     arrayProcessos = (Processo **) malloc(sizeof(Processo *) * quantidadeProcessos);
-
-    for(int i = 0; i < QTD_FILAS; i++){
-        arrayFilas[i] = criarFila();
-    }
 
     bootDispositivos(duracaoDisco, duracaoFita, duracaoImpressora);
 
@@ -109,11 +100,13 @@ void inicializarSimulador(int quantidadeProcessos, int quantum, int duracaoDisco
 void executarCiclo() {
     printf("\nTempo %d\n", relogio);
 
+    //atualiza o estado dos processos executando IO
     for(int i = 0; i < QTD_DISPOSITIVOS; i++) { 
         dispositivoExecutarUnidade(i);
         verificarRetornoIo(i);
     }
 
+    //atualiza o estado do processo na
     if (processoAtualCpu == NULL) {
         for(int i = 0; i < QTD_FILAS; i++) {
             Processo* p = desenfileirarProcesso(arrayFilas[i]);
