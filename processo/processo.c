@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "processo.h"
 #include "constants.h"
-#include "escalonador.c"
+#include "escalonador.h"
 
 // função que gera o tempo total de um processo, de forma aleatoria, multiplicando o quantum
 int calcTempoTotal(int quantum){
