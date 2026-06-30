@@ -10,7 +10,7 @@ FilaProcessos* criarFila(){
     return fila;
 }
 
-void enfileirarProcessos(Processo* processoP, FilaProcessos* filaP){
+void enfileirarProcesso(Processo* processoP, FilaProcessos* filaP){
     ElemFila* elementoP = (ElemFila*) malloc(sizeof(ElemFila));
     elementoP->processoP = processoP;
     //caso a fila esteja vazia
