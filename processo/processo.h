@@ -9,30 +9,40 @@ typedef enum{
     TERMINOU
 }statusProcesso;
 
-//typedef enum{
-//    BAIXA,
-//    MEDIA,
-//    ALTA
-//}prioridadeProcesso;
-
 typedef enum{
     DISCO,
     FITA_MAGNETICA,
-    IMPRESSORA
+    IMPRESSORA,
+    SEM_IO
 }tipoIOProcesso;
 
 typedef struct Processo{
     int pid;
     int ppid; //indicação do process id do processo pai
     statusProcesso status;
-    int prioridade; //indica a fila de prioridade do processo. 0 é a prioridade maxima
+    int prioridade;
+    int tempoTotal; //somatorio do tempo que o processo precisa
+    int tempoDecorrido; //somatorio do tempo de execução do processo
     int momentoIO; //momento em que o processo vai parar para fazer IO
     int tempoIO; //tempo que o processo precisa para fazer IO
     tipoIOProcesso tipoIO;
     int cpuTimeRestante; //tempo em execucao restante ate completar um quantum
-    int cpuTimeTotal //tempo em execucao total
 } Processo;
 
+Processo *criarProcesso(int pid, int ppid);
 
+void destruirProcesso(Processo *processo);
+
+void imprimirProcesso(Processo *processo);
+
+void mudarStatusProcesso(Processo *processo, statusProcesso novoStatus);
+
+int calcTempoTotal(int quantum);
+
+int calcTempoIO (int tempoTotalProcesso);
+
+int calcMomentoIO (int tempoTotalProcesso);
+
+int criaPid ();
 
 #endif 

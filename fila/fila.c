@@ -44,7 +44,7 @@ Processo* desenfileirarProcesso(FilaProcessos* filaP){
     }
 
     Processo* processoP = elementoP->processoP;
-    free(elementoP);
+    free(elementoP); // libera a memoria que estava sendo utilizada
 
     return processoP;
 }
