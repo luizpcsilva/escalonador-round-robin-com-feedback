@@ -1,17 +1,11 @@
 #include <stdlib.h>
 #include <time.h>
 #include "simulador.h"
+#include "constants.h"
 
 int main(void) {
-    int quantidadeProcessos = 6;
-    int quantum = 3;
-    int duracaoDisco = 4;
-    int duracaoFita = 3;
-    int duracaoImpressora = 2;
-    int tempoMinServico = 5;
-    int tempoMaxServico = 12;
-
-    inicializarSimulador(quantidadeProcessos, quantum, duracaoDisco, duracaoFita, duracaoImpressora, tempoMinServico, tempoMaxServico);
+    inicializarSimulador(QTD_MAX_PROCESSOS, QUANTUM, DURACAO_DISCO, DURACAO_FITA, DURACAO_IMPRESSORA, TEMPO_MIN_SERVICO, TEMPO_MAX_SERVICO);
+    
     executarSimulacao();
     liberarSimulador();
 
