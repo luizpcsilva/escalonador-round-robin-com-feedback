@@ -64,6 +64,7 @@ void admitirProcesso(Processo* processoP){
 
     if(processoP->status == BLOQUEADO && processoP->tipoIO == DISCO){
         processoP->prioridade = QTD_FILAS-1;
+        enfileirarProcesso(processoP, arrayFilas[processoP->prioridade]);
     }
     
     enfileirarProcesso(processoP, arrayFilas[0]);
