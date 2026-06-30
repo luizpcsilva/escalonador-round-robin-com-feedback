@@ -40,7 +40,7 @@ void aplicaPreempsao(){
     processoEmExecucao->cpuTimeRestante = QUANTUM;
 
     //adiciona ele no fim da nova fila de prioridade
-    enfileirarProcesso(processoEmExecucao, processoEmExecucao->prioridade);
+    enfileirarProcesso(processoEmExecucao, arrayFilas[processoEmExecucao->prioridade]);
     processoEmExecucao->status= PRONTO;
     
     iniciaExecucaoNovoProcesso();
@@ -61,9 +61,19 @@ void finalizarProcesso(){
 void admitirProcesso(Processo* processoP){
     processoP->status = PRONTO;
     processoP->prioridade = 0;
-    enfileirarProcesso(processoP, 0);
-
+    enfileirarProcesso(processoP, arrayFilas[0]);
 }
 
-//TODO boostPrioridade
+void boostPrioridade(){
+    //seleciona todos os processos das filas de prioridade
+    //menor que 0 e os move para fila de maior prioridade
+    for(int i=1; i < QTD_FILAS; i++){
+        Processo* processoP = desenfileirarProcesso(arrayFilas[i]);
+        //enquanto a fila nao estiver vazia
+        while(processoP != NULL){
+            admitirProcesso(processoP);
+            processoP = desenfileirarProcesso(arrayFilas[i]);
+        }
+    }
+}
 
