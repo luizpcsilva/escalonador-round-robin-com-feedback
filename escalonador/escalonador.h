@@ -16,6 +16,8 @@ void bloquearProcesso();
 //lida com o término de um processo durante sua execucao
 void finalizarProcesso();
 
+void iniciaExecucaoNovoProcesso();
+
 void boostPrioridade();
 
 void admitirProcesso(Processo* processoP);
