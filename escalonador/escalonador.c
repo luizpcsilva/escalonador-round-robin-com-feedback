@@ -55,7 +55,15 @@ void bloquearProcesso(){
 
 void finalizarProcesso(){
     processoEmExecucao->status = TERMINOU;
+    destruirProcesso(processoEmExecucao);
     iniciaExecucaoNovoProcesso();
+}
+
+void admitirProcesso(Processo* processoP){
+    processoP->status = PRONTO;
+    processoP->prioridade = 0;
+    enfileirarProcesso(processoP, 0);
+
 }
 
 //TODO boostPrioridade
