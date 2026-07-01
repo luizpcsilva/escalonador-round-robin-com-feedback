@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "simulador.h"
-#include "io.h" 
-#include "fila.h" 
-#include "processo.h"
+#include "io/io.h" 
+#include "fila/fila.h" 
+#include "processo/processo.h"
 
 static int relogio = 0;
 static int totalProcessos = 0;
@@ -65,7 +65,7 @@ static void enviarParaIo(Processo *processo) {
 static void atualizarProcessoCpu() {
     if (processoAtualCpu == NULL) return;
     
-    executarProcesso(processoAtualCpu);
+    processoAtualCpu->tempoDecorrido++;
     quantumRestante--;
     
     printf("  CPU: P%d [%d/%d] Q:%d\n", processoAtualCpu->pid, processoAtualCpu->tempoDecorrido, processoAtualCpu->tempoTotal, quantumRestante);
@@ -88,7 +88,6 @@ void inicializarSimulador(int quantidadeProcessos, int quantum, int duracaoDisco
     relogio = 0;
     totalProcessos = quantidadeProcessos;
     processosFinalizados = 0;
-    quantumPadrao = quantum;
     quantumRestante = 0;
     processoAtualCpu = NULL;
 
@@ -101,7 +100,7 @@ void inicializarSimulador(int quantidadeProcessos, int quantum, int duracaoDisco
     bootDispositivos(duracaoDisco, duracaoFita, duracaoImpressora);
 
     for (int i = 0; i < quantidadeProcessos; i++) {
-        arrayProcessos[i] = criarProcesso(i + 1, 0);
+        arrayProcessos[i] = criarProcesso(i + 1, 0, quantum);
         retornarParaEscalonador(arrayProcessos[i], RETORNO_IO_FITA); 
     }
 }
@@ -138,20 +137,6 @@ void executarCiclo() {
     relogio++;
 }
 
-void executarSimulacao() {
-    printf("PROCESSOS CRIADOS:\n");
-    for (int i = 0; i < totalProcessos; i++) {
-        Processo *p = arrayProcessos[i];
-        printf("  P%d - Total: %d - IO: %s em %d\n", p->pid, p->tempoTotal, nomeTipoIo(p->tipoIO), p->momentoIO);
-    }
-    printf("\n");
-
-    while (processosFinalizados < totalProcessos) {
-        executarCiclo();
-    }
-
-    imprimirResumoFinal();
-}
 
 void imprimirEstadoSimulador() {
     printf("PRONTOS - ");

@@ -33,11 +33,11 @@ void iniciaExecucaoNovoProcesso(){
     }   
 }
 
-void aplicaPreempsao(){
+void aplicaPreempsao(int quantum){
     if(processoEmExecucao->prioridade < QTD_FILAS){
         processoEmExecucao->prioridade += 1;
     } 
-    processoEmExecucao->cpuTimeRestante = QUANTUM;
+    processoEmExecucao->cpuTimeRestante = quantum;
 
     //adiciona ele no fim da nova fila de prioridade
     enfileirarProcesso(processoEmExecucao, arrayFilas[processoEmExecucao->prioridade]);

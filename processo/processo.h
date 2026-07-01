@@ -29,7 +29,7 @@ typedef struct Processo{
     int cpuTimeRestante; //tempo em execucao restante ate completar um quantum
 } Processo;
 
-Processo *criarProcesso(int pid, int ppid);
+Processo *criarProcesso(int pid, int ppid, int quantum);
 
 void destruirProcesso(Processo *processo);
 

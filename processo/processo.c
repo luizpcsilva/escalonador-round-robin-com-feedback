@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "processo.h"
-#include "constants.h"
-#include "escalonador.h"
+
 
 // função que gera o tempo total de um processo, de forma aleatoria, multiplicando o quantum
 int calcTempoTotal(int quantum){
@@ -43,7 +42,7 @@ int criaPid(){
     return pidAtual;
 }
 
-Processo *criarProcesso(int PID, int PPID){ // utilizar no main a função criaPid como parâmetro de criarProcesso
+Processo *criarProcesso(int PID, int PPID, int quantum){ // utilizar no main a função criaPid como parâmetro de criarProcesso
     
     Processo *novoProcesso = (Processo*) malloc(sizeof(Processo)); // aloca espaço para o processo
 
@@ -63,7 +62,7 @@ Processo *criarProcesso(int PID, int PPID){ // utilizar no main a função criaP
     novoProcesso->tempoDecorrido = 0; // se o processo é novo então ainda não executou
     novoProcesso->status = NOVO;
     novoProcesso->prioridade = 1; // todos os processos iniciam com alta prioridade
-    novoProcesso->tempoTotal = calcTempoTotal(QUANTUM); // gera um tempo total do processo com base no quantum
+    novoProcesso->tempoTotal = calcTempoTotal(quantum); // gera um tempo total do processo com base no quantum
     novoProcesso->tempoIO = calcTempoIO(novoProcesso->tempoTotal); // gera um tempo de io com base no tempo total
     if(novoProcesso->tempoIO == 0){
         novoProcesso->momentoIO = 0;
