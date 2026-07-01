@@ -69,7 +69,7 @@ void imprimirProcesso(Processo *processo) {
     if (!processo) {
          printf("Sem Processo\n"); 
          return; 
-        }
+    }
     // vetores de status e tipo de io para imprimir
     const char *status[] = {"NOVO","PRONTO","BLOQUEADO","EXECUCAO","TERMINOU"};
     const char *io[] = {"DISCO","FITA_MAGNETICA","IMPRESSORA","SEM_IO"};
