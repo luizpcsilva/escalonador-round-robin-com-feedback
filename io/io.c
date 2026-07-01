@@ -31,25 +31,23 @@ void dispositivoReceberProcesso(Processo *processo, int tipoIo) {
     enfileirarProcessos(processo, arrayDispositivos[tipoIo]->filaBloqueados); 
 }
 
-void dispositivoExecutarUnidade(int tipoIo) {
+Processo* dispositivoExecutarUnidade(int tipoIo) {
     Processo *processo = consultarInicioFila(arrayDispositivos[tipoIo]->filaBloqueados); 
-
-    if (processo != NULL && processo->tempoIO > 0) {  
-        processo->tempoIO--;
+    if(processo == NULL){
+        return NULL;
     }
-}
-
-int dispositivoOperacaoTerminou(int tipoIo) {
-    Processo *processo = consultarInicioFila(arrayDispositivos[tipoIo]->filaBloqueados); 
-    return processo != NULL && processo->tempoIO <= 0;  
-}
-
-Processo* dispositivoRetirarConcluido(int tipoIo) {
-    if (dispositivoOperacaoTerminou(tipoIo)) {
-        return desenfileirarProcesso(arrayDispositivos[tipoIo]->filaBloqueados); 
+    else if(processo->tempoIO == 0){
+        desenfileirarProcesso(arrayDispositivos[tipoIo]->filaBloqueados);
+        return processo;
     }
-    return NULL;
+    else{
+        processo->tempoIO -= 1;
+        return NULL;
+    }
+    
+
 }
+
 
 void imprimirDispositivo(int tipoIo) {
     Processo *processo = consultarInicioFila(arrayDispositivos[tipoIo]->filaBloqueados); 
