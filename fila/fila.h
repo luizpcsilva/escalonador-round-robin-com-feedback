@@ -1,8 +1,11 @@
+#ifndef FILA_H
+#define FILA_H
+
 //fazendo forward declaration de processo
 typedef struct Processo Processo;
 
 typedef struct ElemFila{
-    ElemFila* proximo;
+    struct ElemFila* proximo;
     Processo* processoP;
     ElemFila* anterior;
 }ElemFila;
@@ -20,3 +23,5 @@ Processo* desenfileirarProcesso(FilaProcessos* filaP);
 
 
 Processo* consultarInicioFila(FilaProcessos* filaP);
+
+#endif 

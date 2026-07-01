@@ -1,6 +1,8 @@
 #ifndef IO_H
 #define IO_H
 
+#include "../fila/fila.h"
+
 #include "../processo/processo.h" 
 #define QTD_DISPOSITIVOS 3 
 
@@ -29,5 +31,7 @@ Processo* dispositivoRetirarConcluido(int tipoIo);
 void imprimirDispositivo(int tipoIo);
 
 void finalizarDispositivos(void);
+
+void liberarMemoriaIO();
 
 #endif 

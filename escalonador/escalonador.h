@@ -1,3 +1,6 @@
+#ifndef ESCALONADOR_H
+#define ESCALONADOR_H
+
 #include "fila/fila.h"
 #include "../processo/processo.h"
 
@@ -26,3 +29,7 @@ void iniciaExecucaoNovoProcesso();
 void boostPrioridade();
 
 void admitirProcesso(Processo* processoP);
+
+void liberarMemoriaEscalonador();
+
+#endif
