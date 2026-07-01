@@ -10,7 +10,7 @@
 static int relogio = 0;
 static int totalProcessos = 0;
 static int processosFinalizados = 0;
-static int quantum;
+static int quantum = 0;
 static const char* NOMES_IO[] = {"DISCO", "FITA", "IMP", "SEM IO"};
 static Processo** arrayProcessos = NULL;
 static int linhaTempoCpu[MAX_TEMPO];
@@ -76,8 +76,8 @@ static void gerarRelatorioProcessos() {
 }
 
 
-static void atualizarProcessoCpu() {
-    
+int getQuantum() {
+    return quantum;
 }
 
 void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int duracaoDisco, int duracaoFita, int duracaoImpressora) {
@@ -101,6 +101,7 @@ void executarCiclo() {
     //percorre processos e ativa os processos que forem criados na iteração atual
     for(int i = 0; i < totalProcessos; i++){
         if(arrayProcessos[i]->momentoAtivacao == relogio){
+            arrayProcessos[i] -> cpuTimeRestante = quantum;
             admitirProcesso(arrayProcessos[i]);
         }    
     }
@@ -131,10 +132,6 @@ void executarCiclo() {
         //acabou o quantum
         else if (processoEmExecucao->cpuTimeRestante == 0) {
             aplicaPreempsao();
-            processoEmExecucao = getProcessoEmExecucao();
-            if (processoEmExecucao != NULL) {
-                processoEmExecucao->cpuTimeRestante = quantum;
-            }
         }
     }
     
@@ -148,7 +145,7 @@ void executarCiclo() {
         }
      }
 
-    imprimirEstadoSimulador();
+    registrarLinhaTempoCpu(getProcessoEmExecucao());
     relogio++;
 }
 
@@ -162,7 +159,6 @@ void executarSimulacao() {
     imprimirResumoFinal();
 }
 
-void imprimirEstadoSimulador(){}
     
 
 void imprimirResumoFinal() {
@@ -177,7 +173,7 @@ void liberarMemoria(){
 
     //liberar memoria IO
     liberarMemoriaIO();
-    
+
     //libera memoria processos
     for(int i = 0; i < totalProcessos; i++){
         destruirProcesso(arrayProcessos[i]);

@@ -38,6 +38,7 @@ void iniciaExecucaoNovoProcesso(){
             continue;
         }
         processoEmExecucao = processoP;
+        processoEmExecucao->cpuTimeRestante = getQuantum();
         processoEmExecucao->status = EXECUCAO;  
         break;
     }   
@@ -46,8 +47,9 @@ void iniciaExecucaoNovoProcesso(){
 void aplicaPreempsao(){
     if(processoEmExecucao->prioridade < QTD_FILAS - 1){
         processoEmExecucao->prioridade += 1;
-    } 
-
+    }
+    //atualiza o tempo de quantum dele
+    processoEmExecucao->cpuTimeRestante = getQuantum();
     //adiciona ele no fim da nova fila de prioridade
     enfileirarProcesso(processoEmExecucao, arrayFilas[processoEmExecucao->prioridade]);
     processoEmExecucao->status= PRONTO;
