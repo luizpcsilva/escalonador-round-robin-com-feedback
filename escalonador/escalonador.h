@@ -1,4 +1,5 @@
 #include "fila/fila.h"
+#include "../processo/processo.h"
 
 //forward declaration de processo
 typedef struct Processo Processo;

@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "simulador.h"
-#include "io/io.h" 
-#include "fila/fila.h" 
-#include "processo/processo.h"
-#include "escalonador/escalonador.h"
+#include "../io/io.h" 
+#include "../fila/fila.h" 
+#include "../processo/processo.h"
+#include "../escalonador/escalonador.h"
 
 static int relogio = 0;
 static int totalProcessos = 0;
@@ -38,6 +38,10 @@ void executarCiclo() {
     }
     //se apos iniciar execucao de novo houver processo na cpu
     if(getProcessoEmExecucao()!=NULL){
+        //atualiza timers
+        getProcessoEmExecucao()->tempoDecorrido ++;
+        getProcessoEmExecucao()->cpuTimeRestante --;
+
         //se processo acabou
         if (getProcessoEmExecucao()->tempoDecorrido == getProcessoEmExecucao()->tempoTotal) {
         finalizarProcesso();
@@ -52,8 +56,6 @@ void executarCiclo() {
             aplicaPreempsao();
             getProcessoEmExecucao()->cpuTimeRestante = quantum;
     }
-    getProcessoEmExecucao()->tempoDecorrido ++;
-    getProcessoEmExecucao()->cpuTimeRestante --;
     }
 
     //atualiza o estado dos processos executando IO
