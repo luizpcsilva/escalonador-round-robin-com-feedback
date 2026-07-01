@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "io.h"
-#include "fila.h"
+#include "../fila/fila.h"
 
 static DispositivoIO* arrayDispositivos[QTD_DISPOSITIVOS];
 

@@ -7,7 +7,7 @@ typedef struct Processo Processo;
 typedef struct ElemFila{
     struct ElemFila* proximo;
     Processo* processoP;
-    ElemFila* anterior;
+    struct ElemFila* anterior;
 }ElemFila;
 
 typedef struct FilaProcessos{

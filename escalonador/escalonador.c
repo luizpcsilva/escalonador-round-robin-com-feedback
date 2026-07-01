@@ -3,6 +3,8 @@
 #include "fila/fila.h"
 #include <stdlib.h>
 #include "../constants.h"
+#include "../simulador/simulador.h"
+#include "../io/io.h"
 
 static Processo* processoEmExecucao = NULL;
 static FilaProcessos* arrayFilas[QTD_FILAS];

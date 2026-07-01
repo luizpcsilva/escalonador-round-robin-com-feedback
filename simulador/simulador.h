@@ -26,4 +26,6 @@ void liberarSimulador(void);
 
 void liberarMemoria();
 
+int getQuantum(void);
+
 #endif 
