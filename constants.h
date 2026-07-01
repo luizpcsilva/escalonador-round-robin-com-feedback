@@ -1,10 +1,5 @@
-//tamanho do quantum em iterações. 1 é a menor unidade de tempo
-#define QUANTUM 100
-#define COUNT_BOOST_PRIORIDADE (QUANTUM*10)
 #define QTD_FILAS 3
 #define QTD_MAX_PROCESSOS 6
 #define DURACAO_DISCO 4
 #define DURACAO_FITA 3
 #define DURACAO_IMPRESSORA 2
-#define TEMPO_MIN_SERVICO 5
-#define TEMPO_MAX_SERVICO 12
