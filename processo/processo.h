@@ -2,6 +2,11 @@
 #define PROCESSO_H
 
 typedef enum{
+    TEMPO_EXECUÇÃO,
+    TEMPO_IO
+}flagTempo;
+
+typedef enum{
     NOVO,
     PRONTO,
     BLOQUEADO,
@@ -16,7 +21,7 @@ typedef enum{
     SEM_IO
 }tipoIOProcesso;
 
-typedef struct Processo{
+typedef struct{
     int pid;
     int ppid; //indicação do process id do processo pai
     statusProcesso status;
@@ -26,8 +31,9 @@ typedef struct Processo{
     int momentoIO; //momento em que o processo vai parar para fazer IO
     int tempoIO; //tempo que o processo precisa para fazer IO
     tipoIOProcesso tipoIO;
+    int momentoAtivacao;
     int cpuTimeRestante; //tempo em execucao restante ate completar um quantum
-} Processo;
+}Processo;
 
 Processo *criarProcesso(int pid, int ppid, int quantum);
 
@@ -44,5 +50,7 @@ int calcTempoIO (int tempoTotalProcesso);
 int calcMomentoIO (int tempoTotalProcesso);
 
 int criaPid ();
+
+int calcTempoAtivacao(int quantum);
 
 #endif 
