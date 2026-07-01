@@ -11,9 +11,11 @@ static int relogio = 0;
 static int totalProcessos = 0;
 static int processosFinalizados = 0;
 static int quantum = 0;
+static int tempoBoostPrioridade = 0;
 static const char* NOMES_IO[] = {"DISCO", "FITA", "IMP", "SEM IO"};
 static Processo** arrayProcessos = NULL;
 static int linhaTempoCpu[MAX_TEMPO];
+
 
 static void registrarLinhaTempoCpu(Processo *processo) {
     if (relogio < MAX_TEMPO) {
@@ -94,6 +96,9 @@ void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int durac
     for(int i = 0; i < quantidadeProcessos; i++) {
         arrayProcessos[i] = criarProcesso(criaPid(), 0, quantum);
     }
+
+    //calcula tempo para boost de prioridade
+    tempoBoostPrioridade = quantumEntrada * quantidadeProcessos * 5;
 }
 
 void executarCiclo() {
@@ -144,7 +149,12 @@ void executarCiclo() {
             admitirProcesso(processoIO);
         }
      }
-
+    
+    //verifica se está na hora de boost de prioridade - evitar starvation
+    if(relogio % tempoBoostPrioridade == 0){
+        boostPrioridade();
+    }
+    
     registrarLinhaTempoCpu(getProcessoEmExecucao());
     relogio++;
 }

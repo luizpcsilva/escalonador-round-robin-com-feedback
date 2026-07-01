@@ -9,6 +9,7 @@ static FilaProcessos* arrayFilas[QTD_FILAS];
 static Processo** todosProcessos = NULL;
 static int totalProcessosEscalonador = 0;
 
+
 Processo** getTodosProcessos() {
     return todosProcessos;
 }

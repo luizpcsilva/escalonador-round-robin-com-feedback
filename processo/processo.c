@@ -6,7 +6,7 @@
 int calcTempo(int quantum, flagTempo flag){
 
     // se a flag for 0, então estamos calculando o tempo de cpu que não pode ser 0
-    if( flag == TEMPO_EXECUÇÃO){
+    if( flag == TEMPO_EXECUCÃO){
         int n = (int) rand() % 8 +1; // o processo sdeve ter no máximo 8 vezes um quantum de tempo total
         int aux = (int) rand() % (n * quantum +1) +1; // o tamanho do tempo total é o quantum n vezes
         return aux;
@@ -119,7 +119,7 @@ Processo *criarProcesso(int PID, int PPID, int quantum){ // utilizar no main a f
         a flag inicia com 0, pois primeiro calculamos o tempo de execução
     */
 
-    flagTempo flag= TEMPO_EXECUÇÃO;
+    flagTempo flag= TEMPO_EXECUCÃO;
     novoProcesso->tempoTotal = calcTempo(quantum, flag); // gera o tempo de execução do processo com base no quantum
 
     flag = TEMPO_IO; 
