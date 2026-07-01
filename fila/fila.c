@@ -49,4 +49,10 @@ Processo* desenfileirarProcesso(FilaProcessos* filaP){
     return processoP;
 }
 
+Processo* consultarInicioFila(FilaProcessos* filaP){
+    if(filaP->inicio == NULL) return NULL;
+
+    return(filaP->inicio->processoP);
+}
+
 
