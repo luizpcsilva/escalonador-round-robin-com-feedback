@@ -5,17 +5,45 @@
 #include "../fila/fila.h" 
 #include "../processo/processo.h"
 #include "../escalonador/escalonador.h"
+#include "../constants.h"
 
 static int relogio = 0;
 static int totalProcessos = 0;
 static int processosFinalizados = 0;
 static int quantum;
 static const char* NOMES_IO[] = {"DISCO", "FITA", "IMP", "SEM IO"};
+static Processo** arrayProcessos = NULL;
+static int linhaTempoCpu[MAX_TEMPO];
 
-static void gerarRelatorioProcessos(void) {
+static void registrarLinhaTempoCpu(Processo *processo) {
+    if (relogio < MAX_TEMPO) {
+        if (processo != NULL) {
+            linhaTempoCpu[relogio] = processo->pid;
+        } else {
+            linhaTempoCpu[relogio] = 0; // no caso da cpu ociosa
+        }
+    }
+}
+
+static void gerarLinhaTempoCpu() {
+    FILE *arquivo = fopen("linha_tempo_cpu.txt", "w");
+    if (arquivo == NULL) {
+        printf("Erro ao criar o arquivo linha_tempo_cpu.txt\n");
+        return;
+    }
+
+    for (int t = 0; t < relogio; t++) {
+        fprintf(arquivo, "%d %d\n", t, linhaTempoCpu[t]);
+    }
+
+    fclose(arquivo);
+    printf("Arquivo 'linha_tempo_cpu.txt' foi gerado com sucesso\n");
+}
+
+static void gerarRelatorioProcessos() {
     FILE *arquivo = fopen("relatorio_processos.txt", "w");
     if (arquivo == NULL) {
-        printf("Erro ao criar o arquivo\n");
+        printf("Erro ao criar o arquivo relatorio_processos.txt\n");
         return;
     }
 
@@ -44,7 +72,7 @@ static void gerarRelatorioProcessos(void) {
     fclose(arquivo);
     printf("\nRelatório gerado em 'relatorio_processos.txt'\n");
 }
-static Processo** arrayProcessos;
+
 
 static void atualizarProcessoCpu() {
     
@@ -59,7 +87,7 @@ void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int durac
 
 
     bootDispositivos(duracaoDisco, duracaoFita, duracaoImpressora);
-    arrayProcessos = (Processo*) malloc(sizeof(Processo*)*quantidadeProcessos);
+    arrayProcessos = (Processo**) malloc(sizeof(Processo*)*quantidadeProcessos);
 
     for(int i = 0; i < quantidadeProcessos; i++) {
         arrayProcessos[i] = criarProcesso(criaPid(), 0, quantum);
@@ -81,10 +109,10 @@ void executarCiclo() {
         processoEmExecucao = getProcessoEmExecucao();
     }
     //se apos iniciar execucao de novo houver processo na cpu
-    if(getProcessoEmExecucao()!=NULL){
+    if(processoEmExecucao!=NULL){
         //atualiza timers
-        getProcessoEmExecucao()->tempoDecorrido ++;
-        getProcessoEmExecucao()->cpuTimeRestante --;
+        processoEmExecucao->tempoDecorrido ++;
+        processoEmExecucao->cpuTimeRestante --;
 
         //se processo acabou
         if (processoEmExecucao->tempoDecorrido == processoEmExecucao->tempoTotal) {
@@ -107,7 +135,7 @@ void executarCiclo() {
             }
         }
     }
-    }
+    
 
     //atualiza o estado dos processos executando IO
     for(int i = 0; i < QTD_DISPOSITIVOS; i++) { //para cada dispositivo de IO
@@ -127,6 +155,7 @@ void executarSimulacao() {
         executarCiclo();
     }
 
+    gerarLinhaTempoCpu();   
     gerarRelatorioProcessos();
     imprimirResumoFinal();
 }
