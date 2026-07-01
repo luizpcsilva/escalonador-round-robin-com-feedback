@@ -31,30 +31,29 @@ void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int durac
 }
 
 void executarCiclo() {
-    Processo* processoEmExecucao = getProcessoEmExecucao();
 
     //se nao houver processo na cpu
-    if (processoEmExecucao == NULL) {
+    if (getProcessoEmExecucao() == NULL) {
         iniciaExecucaoNovoProcesso();
     }
-    //se apos iniciar execucao houver processo na cpu
-    if(processoEmExecucao!=NULL){
+    //se apos iniciar execucao de novo houver processo na cpu
+    if(getProcessoEmExecucao()!=NULL){
         //se processo acabou
-        if (processoEmExecucao->tempoDecorrido == processoEmExecucao->tempoTotal) {
+        if (getProcessoEmExecucao()->tempoDecorrido == getProcessoEmExecucao()->tempoTotal) {
         finalizarProcesso();
         processosFinalizados ++;
         } 
         //processo faz IO
-        else if (processoEmExecucao->momentoIO == processoEmExecucao->tempoDecorrido) {
+        else if (getProcessoEmExecucao()->momentoIO == getProcessoEmExecucao()->tempoDecorrido) {
             bloquearProcesso();
         }
         //acabou o quantum
-        else if (processoEmExecucao->cpuTimeRestante == 0) {
+        else if (getProcessoEmExecucao()->cpuTimeRestante == 0) {
             aplicarPreempsao();
-            processoEmExecucao->cpuTimeRestante = quantum;
+            getProcessoEmExecucao()->cpuTimeRestante = quantum;
     }
-    processoEmExecucao->tempoDecorrido ++;
-    processoEmExecucao->cpuTimeRestante --;
+    getProcessoEmExecucao()->tempoDecorrido ++;
+    getProcessoEmExecucao()->cpuTimeRestante --;
     }
 
     //atualiza o estado dos processos executando IO
