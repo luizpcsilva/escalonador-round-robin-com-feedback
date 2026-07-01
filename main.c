@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
     inicializarSimulador(quantidadeProcessos, quantum, DURACAO_DISCO, DURACAO_FITA, DURACAO_IMPRESSORA);
     
     executarSimulacao();
-    liberarSimulador();
+    liberarMemoria();
 
     return 0;
 }

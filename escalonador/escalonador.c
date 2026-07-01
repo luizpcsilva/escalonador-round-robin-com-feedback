@@ -63,7 +63,6 @@ void bloquearProcesso(){
 
 void finalizarProcesso(){
     processoEmExecucao->status = TERMINOU;
-    destruirProcesso(processoEmExecucao);
     iniciaExecucaoNovoProcesso();
 }
 
@@ -95,6 +94,14 @@ void boostPrioridade(){
             admitirProcesso(processoP);
             processoP = desenfileirarProcesso(arrayFilas[i]);
         }
+    }
+}
+
+void liberarMemoriaEscalonador(){
+    //para cada fila
+    for(int i = 0; i < QTD_FILAS; i++){
+        //desenfilere até esvaziar a fila
+        while(desenfileirarProcesso(arrayFilas[i]) != NULL){}
     }
 }
 

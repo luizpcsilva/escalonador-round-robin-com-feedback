@@ -68,3 +68,9 @@ void finalizarDispositivos() {
         }
     }
 }
+
+void liberarMemoriaIO(){
+    for(int i = 0; i<QTD_DISPOSITIVOS; i++){
+        while(desenfileirarProcesso(arrayDispositivos[i]->filaBloqueados) != NULL){}
+    }
+}

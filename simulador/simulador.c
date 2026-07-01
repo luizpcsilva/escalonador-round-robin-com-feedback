@@ -171,4 +171,16 @@ void imprimirResumoFinal() {
     printf("Processos finalizados: %d/%d\n", processosFinalizados, totalProcessos);
 }
 
+void liberarMemoria(){
+    //liberar memoria escalonador
+    liberarMemoriaEscalonador();
 
+    //liberar memoria IO
+    liberarMemoriaIO();
+    
+    //libera memoria processos
+    for(int i = 0; i < totalProcessos; i++){
+        destruirProcesso(arrayProcessos[i]);
+    }
+    
+}
