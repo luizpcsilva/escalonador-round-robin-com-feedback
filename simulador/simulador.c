@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "simulador.h"
-#include "io/io.h" 
-#include "fila/fila.h" 
-#include "processo/processo.h"
-#include "escalonador/escalonador.h"
+#include "../io/io.h" 
+#include "../fila/fila.h" 
+#include "../processo/processo.h"
+#include "../escalonador/escalonador.h"
 
 static int relogio = 0;
 static int totalProcessos = 0;
@@ -44,6 +44,7 @@ static void gerarRelatorioProcessos(void) {
     fclose(arquivo);
     printf("\nRelatório gerado em 'relatorio_processos.txt'\n");
 }
+static Processo** arrayProcessos;
 
 static void atualizarProcessoCpu() {
     
@@ -58,26 +59,33 @@ void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int durac
 
 
     bootDispositivos(duracaoDisco, duracaoFita, duracaoImpressora);
+    arrayProcessos = (Processo*) malloc(sizeof(Processo*)*quantidadeProcessos);
 
-    for (int i = 0; i < quantidadeProcessos; i++) {
-        Processo *p = criarProcesso(criaPid(), 0, quantum);
-        p->momentoAtivacao = relogio; 
-        p->momentoFimExecucao = 0;
-        
-        admitirProcesso(p);
-
+    for(int i = 0; i < quantidadeProcessos; i++) {
+        arrayProcessos[i] = criarProcesso(criaPid(), 0, quantum);
     }
 }
 
 void executarCiclo() {
     Processo* processoEmExecucao = getProcessoEmExecucao();
+    //percorre processos e ativa os processos que forem criados na iteração atual
+    for(int i = 0; i < totalProcessos; i++){
+        if(arrayProcessos[i]->momentoAtivacao == relogio){
+            admitirProcesso(arrayProcessos[i]);
+        }    
+    }
+
     //se nao houver processo na cpu
     if (processoEmExecucao == NULL) {
         iniciaExecucaoNovoProcesso();
         processoEmExecucao = getProcessoEmExecucao();
     }
     //se apos iniciar execucao de novo houver processo na cpu
-    if(processoEmExecucao!=NULL){
+    if(getProcessoEmExecucao()!=NULL){
+        //atualiza timers
+        getProcessoEmExecucao()->tempoDecorrido ++;
+        getProcessoEmExecucao()->cpuTimeRestante --;
+
         //se processo acabou
         if (processoEmExecucao->tempoDecorrido == processoEmExecucao->tempoTotal) {
             processoEmExecucao->momentoFimExecucao = relogio;
@@ -99,10 +107,6 @@ void executarCiclo() {
             }
         }
     }
-    
-    if (processoEmExecucao != NULL && processoEmExecucao->status == EXECUCAO) {
-        processoEmExecucao->tempoDecorrido++;
-        processoEmExecucao->cpuTimeRestante--;
     }
 
     //atualiza o estado dos processos executando IO

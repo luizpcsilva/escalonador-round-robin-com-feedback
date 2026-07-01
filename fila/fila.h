@@ -17,3 +17,6 @@ FilaProcessos* criarFila();
 void enfileirarProcesso(Processo* processoP, FilaProcessos* filaP);
 
 Processo* desenfileirarProcesso(FilaProcessos* filaP);
+
+
+Processo* consultarInicioFila(FilaProcessos* filaP);

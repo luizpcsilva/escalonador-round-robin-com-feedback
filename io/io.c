@@ -36,12 +36,12 @@ Processo* dispositivoExecutarUnidade(int tipoIo) {
     if(processo == NULL){
         return NULL;
     }
-    else if(processo->tempoIO == 0){
+    processo->tempoIO -= 1;
+    if(processo->tempoIO == 0){
         desenfileirarProcesso(arrayDispositivos[tipoIo]->filaBloqueados);
         return processo;
     }
     else{
-        processo->tempoIO -= 1;
         return NULL;
     }
     

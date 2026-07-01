@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "simulador/simulador.h"
+#include "constants.h"
 
 int main(int argc, char *argv[]) {
     int quantidadeProcessos;

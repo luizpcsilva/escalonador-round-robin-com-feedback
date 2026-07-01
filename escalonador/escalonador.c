@@ -1,5 +1,5 @@
 #include "escalonador.h"
-#include "processo/processo.h"
+#include "../processo/processo.h"
 #include "fila/fila.h"
 #include <stdlib.h>
 #include "../constants.h"
