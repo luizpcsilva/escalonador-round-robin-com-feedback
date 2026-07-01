@@ -28,7 +28,7 @@ void dispositivoReceberProcesso(Processo *processo, int tipoIo) {
     processo->status = BLOQUEADO;  
     processo->tempoIO = arrayDispositivos[tipoIo]->duracao;  
     
-    enfileirarProcessos(processo, arrayDispositivos[tipoIo]->filaBloqueados); 
+    enfileirarProcesso(processo, arrayDispositivos[tipoIo]->filaBloqueados); 
 }
 
 Processo* dispositivoExecutarUnidade(int tipoIo) {
@@ -57,6 +57,15 @@ void imprimirDispositivo(int tipoIo) {
         printf("ocioso");
     } else {
         printf("P%d (%d restante)\n", processo->pid, processo->tempoIO);  
+    }
+}
+
+const char* nomeTipoIo(TipoIO tipo) {
+    switch(tipo) {
+        case IO_DISCO: return "DISCO";
+        case IO_FITA: return "FITA";
+        case IO_IMPRESSORA: return "IMPRESSORA";
+        default: return "DESCONHECIDO";
     }
 }
 

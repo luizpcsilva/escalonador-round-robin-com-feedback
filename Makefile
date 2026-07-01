@@ -1,5 +1,5 @@
 
-TARGET = simulador
+TARGET = executar_escalonador
 
 
 CC = gcc

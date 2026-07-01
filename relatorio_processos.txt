@@ -1,0 +1,17 @@
+Processo | Ativação | T. Serviço | T. IO | Início CPU | Fim CPU | Turnaround
+---------|----------|------------|-------|------------|--------|-------
+  P7    |     0   |     57    |  FITA  |      0    |   201 |  201
+  P9    |    17   |     15    |  FITA  |     17    |    58 |   41
+  P5    |    20   |     10    |  FITA  |     20    |   166 |  146
+  P6    |    32   |     26    |  FITA  |     32    |   179 |  147
+  P2    |    33   |    111    |  DISCO |     33    |   391 |  358
+  P1    |    35   |     57    |  IMP   |     35    |   332 |  297
+  P8    |    37   |     58    |  IMP   |     37    |   337 |  300
+  P4    |    43   |     11    |  FITA  |     43    |   181 |  138
+  P10   |    45   |     36    |  FITA  |     45    |   282 |  237
+  P3    |    48   |      8    |  DISCO |     48    |   270 |  222
+------------------------------------------------------------
+Informações adicionais:
+  - Total de processos: 10
+  - Quantum utilizado: 20
+  - Tempo total de simulação: 392 unidades

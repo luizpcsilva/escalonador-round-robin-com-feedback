@@ -34,4 +34,6 @@ void finalizarDispositivos(void);
 
 void liberarMemoriaIO();
 
+const char* nomeTipoIo(TipoIO tipo);
+
 #endif 
