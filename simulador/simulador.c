@@ -60,9 +60,9 @@ static void gerarRelatorioProcessos() {
 
         int inicioCpu = p->momentoAtivacao;
         int fimCpu = p->momentoFimExecucao;
-        int tempoCpu = fimCpu - inicioCpu;
+        int turnaround = fimCpu - inicioCpu;
 
-        fprintf(arquivo, "  P%-4d |   %3d   |    %3d    |  %-5s |    %3d    |   %3d |  %3d\n", p->pid, p->momentoAtivacao, p->tempoTotal, nomeIO, inicioCpu, fimCpu, tempoCpu);
+        fprintf(arquivo, "  P%-4d |   %3d   |    %3d    |  %-5s |    %3d    |   %3d |  %3d\n", p->pid, p->momentoAtivacao, p->tempoTotal, nomeIO, inicioCpu, fimCpu, turnaround);
     }
 
     fprintf(arquivo, "------------------------------------------------------------\n");
