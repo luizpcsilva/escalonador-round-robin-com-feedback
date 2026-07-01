@@ -30,7 +30,7 @@ int calcTempoIO(int tempoTotalProcesso, int quantum){
 int calcMomentoIO(int tempoTotalProcesso){
     
     if(tempoTotalProcesso <=1){
-        return 0;
+        return -1;
     }
     else{
         int max = tempoTotalProcesso -1;
@@ -126,7 +126,7 @@ Processo *criarProcesso(int PID, int PPID, int quantum){ // utilizar no main a f
     novoProcesso->tempoIO = calcTempo(quantum, flag); // gera um tempo de io com base no quantum
 
     if(novoProcesso->tempoIO == 0){
-        novoProcesso->momentoIO = 0;
+        novoProcesso->momentoIO = -1;
     }
     else{
         novoProcesso->momentoIO = calcMomentoIO(novoProcesso->tempoTotal); // gera o momento em que o processo vai

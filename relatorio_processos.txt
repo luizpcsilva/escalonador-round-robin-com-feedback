@@ -1,17 +1,17 @@
 Processo | Ativação | T. Serviço | T. IO | Início CPU | Fim CPU | Turnaround
 ---------|----------|------------|-------|------------|--------|-------
-  P7    |     0   |     57    |  FITA  |      0    |   201 |  201
-  P9    |    17   |     15    |  FITA  |     17    |    58 |   41
-  P5    |    20   |     10    |  FITA  |     20    |   166 |  146
-  P6    |    32   |     26    |  FITA  |     32    |   179 |  147
-  P2    |    33   |    111    |  DISCO |     33    |   391 |  358
-  P1    |    35   |     57    |  IMP   |     35    |   332 |  297
-  P8    |    37   |     58    |  IMP   |     37    |   337 |  300
-  P4    |    43   |     11    |  FITA  |     43    |   181 |  138
-  P10   |    45   |     36    |  FITA  |     45    |   282 |  237
-  P3    |    48   |      8    |  DISCO |     48    |   270 |  222
+  P9    |    17   |     93    |  FITA  |     17    |   570 |  553
+  P3    |    18   |     50    |  DISCO |     18    |   866 |  848
+  P8    |    37   |    118    |  IMP   |     37    |   876 |  839
+  P10   |    45   |    168    |  FITA  |     45    |   1026 |  981
+  P4    |    73   |     41    |  FITA  |     73    |   446 |  373
+  P6    |    92   |     37    |  FITA  |     92    |   474 |  382
+  P5    |   110   |     19    |  FITA  |    110    |   477 |  367
+  P7    |   120   |    250    |  FITA  |    120    |   1226 |  1106
+  P2    |   123   |    276    |  DISCO |    123    |   1355 |  1232
+  P1    |   125   |    284    |  IMP   |    125    |   1276 |  1151
 ------------------------------------------------------------
 Informações adicionais:
   - Total de processos: 10
-  - Quantum utilizado: 20
-  - Tempo total de simulação: 392 unidades
+  - Quantum utilizado: 50
+  - Tempo total de simulação: 1356 unidades
