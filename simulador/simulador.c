@@ -5,6 +5,7 @@
 #include "../fila/fila.h" 
 #include "../processo/processo.h"
 #include "../escalonador/escalonador.h"
+#include "../constants.h"
 
 static int relogio = 0;
 static int totalProcessos = 0;
@@ -12,11 +13,37 @@ static int processosFinalizados = 0;
 static int quantum;
 static const char* NOMES_IO[] = {"DISCO", "FITA", "IMP", "SEM IO"};
 static Processo** arrayProcessos = NULL;
+static int linhaTempoCpu[MAX_TEMPO];
+
+static void registrarLinhaTempoCpu(Processo *processo) {
+    if (relogio < MAX_TEMPO) {
+        if (processo != NULL) {
+            linhaTempoCpu[relogio] = processo->pid;
+        } else {
+            linhaTempoCpu[relogio] = 0; // no caso da cpu ociosa
+        }
+    }
+}
+
+static void gerarLinhaTempoCpu() {
+    FILE *arquivo = fopen("linha_tempo_cpu.txt", "w");
+    if (arquivo == NULL) {
+        printf("Erro ao criar o arquivo linha_tempo_cpu.txt\n");
+        return;
+    }
+
+    for (int t = 0; t < relogio; t++) {
+        fprintf(arquivo, "%d %d\n", t, linhaTempoCpu[t]);
+    }
+
+    fclose(arquivo);
+    printf("Arquivo 'linha_tempo_cpu.txt' foi gerado com sucesso\n");
+}
 
 static void gerarRelatorioProcessos() {
     FILE *arquivo = fopen("relatorio_processos.txt", "w");
     if (arquivo == NULL) {
-        printf("Erro ao criar o arquivo\n");
+        printf("Erro ao criar o arquivo relatorio_processos.txt\n");
         return;
     }
 
@@ -128,6 +155,7 @@ void executarSimulacao() {
         executarCiclo();
     }
 
+    gerarLinhaTempoCpu();   
     gerarRelatorioProcessos();
     imprimirResumoFinal();
 }
