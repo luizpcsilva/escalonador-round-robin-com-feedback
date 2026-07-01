@@ -16,7 +16,7 @@ static void atualizarProcessoCpu() {
     
 }
 
-void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int duracaoDisco, int duracaoFita, int duracaoImpressora, int tempoMinServico, int tempoMaxServico) {
+void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int duracaoDisco, int duracaoFita, int duracaoImpressora) {
     relogio = 0;
     totalProcessos = quantidadeProcessos;
     processosFinalizados = 0;
@@ -25,7 +25,7 @@ void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int durac
 
 
     bootDispositivos(duracaoDisco, duracaoFita, duracaoImpressora);
-    arrayProcessos = (Processo*) malloc(sizeof(Processo)*quantidadeProcessos);
+    arrayProcessos = (Processo*) malloc(sizeof(Processo*)*quantidadeProcessos);
 
     for(int i = 0; i < quantidadeProcessos; i++) {
         arrayProcessos[i] = criarProcesso(criaPid(), 0, quantum);
