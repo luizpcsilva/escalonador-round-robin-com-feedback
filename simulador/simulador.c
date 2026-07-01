@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "simulador.h"
+#include "../simulador/simulador.h"
 #include "../io/io.h" 
 #include "../fila/fila.h" 
 #include "../processo/processo.h"

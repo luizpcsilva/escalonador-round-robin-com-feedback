@@ -24,4 +24,6 @@ void imprimirResumoFinal(void);
 
 void liberarSimulador(void);
 
+void liberarMemoria();
+
 #endif 

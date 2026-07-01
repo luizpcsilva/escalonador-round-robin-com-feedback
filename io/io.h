@@ -1,7 +1,7 @@
 #ifndef IO_H
 #define IO_H
 
-#include "processo.h" 
+#include "../processo/processo.h" 
 #define QTD_DISPOSITIVOS 3 
 
 typedef enum {
