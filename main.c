@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
 
     }else {
         printf("Nenhum argumento passado. É preciso passar como argumento a quantidade de processos e o quantum.");
+        return 1;
     }
     
     srand(10);
