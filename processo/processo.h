@@ -33,6 +33,7 @@ typedef struct Processo{
     tipoIOProcesso tipoIO;
     int momentoAtivacao;
     int cpuTimeRestante; //tempo em execucao restante ate completar um quantum
+    int momentoFimExecucao;
 }Processo;
 
 Processo *criarProcesso(int pid, int ppid, int quantum);

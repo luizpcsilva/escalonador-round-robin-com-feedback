@@ -141,6 +141,7 @@ Processo *criarProcesso(int PID, int PPID, int quantum){ // utilizar no main a f
     }
     novoProcesso->momentoAtivacao = calcTempoAtivacao(quantum);
     novoProcesso->cpuTimeRestante = quantum;
+    novoProcesso->momentoFimExecucao = 0;
 
     return novoProcesso;
 
