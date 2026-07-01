@@ -6,7 +6,16 @@
 
 static Processo* processoEmExecucao = NULL;
 static FilaProcessos* arrayFilas[QTD_FILAS];
+static Processo** todosProcessos = NULL;
+static int totalProcessosEscalonador = 0;
 
+Processo** getTodosProcessos() {
+    return todosProcessos;
+}
+
+int getTotalProcessosEscalonador() {
+    return totalProcessosEscalonador;
+}
 
 Processo* getProcessoEmExecucao(){
     return processoEmExecucao;
@@ -59,16 +68,21 @@ void finalizarProcesso(){
 }
 
 void admitirProcesso(Processo* processoP){
+    if(processoP->status == NOVO) {
+        todosProcessos = (Processo**) realloc(todosProcessos, sizeof(Processo*) * (totalProcessosEscalonador + 1));
+        todosProcessos[totalProcessosEscalonador] = processoP;
+        totalProcessosEscalonador++;
+    }
+    
     if(processoP->status == BLOQUEADO && processoP->tipoIO == DISCO){
         processoP->prioridade = QTD_FILAS-1;
-        enfileirarProcesso(processoP, arrayFilas[processoP->prioridade]);
     }
     else{
         processoP->prioridade = 0;
     }
     processoP->status = PRONTO;
     
-    enfileirarProcesso(processoP, arrayFilas[0]);
+    enfileirarProcesso(processoP, arrayFilas[processoP->prioridade]);
 }
 
 void boostPrioridade(){
