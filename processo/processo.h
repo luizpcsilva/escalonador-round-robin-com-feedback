@@ -2,7 +2,7 @@
 #define PROCESSO_H
 
 typedef enum{
-    TEMPO_EXECUÇÃO,
+    TEMPO_EXECUCÃO,
     TEMPO_IO
 }flagTempo;
 
