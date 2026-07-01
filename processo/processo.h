@@ -16,7 +16,7 @@ typedef enum{
     SEM_IO
 }tipoIOProcesso;
 
-typedef struct Processo{
+typedef struct{
     int pid;
     int ppid; //indicação do process id do processo pai
     statusProcesso status;
@@ -27,9 +27,9 @@ typedef struct Processo{
     int tempoIO; //tempo que o processo precisa para fazer IO
     tipoIOProcesso tipoIO;
     int cpuTimeRestante; //tempo em execucao restante ate completar um quantum
-} Processo;
+}Processo;
 
-Processo *criarProcesso(int pid, int ppid);
+Processo *criarProcesso(int pid, int ppid, int quantum);
 
 void destruirProcesso(Processo *processo);
 
