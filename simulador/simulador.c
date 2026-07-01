@@ -10,6 +10,7 @@ static int relogio = 0;
 static int totalProcessos = 0;
 static int processosFinalizados = 0;
 static int quantum;
+static Processo** arrayProcessos;
 
 static void atualizarProcessoCpu() {
     
@@ -24,13 +25,20 @@ void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int durac
 
 
     bootDispositivos(duracaoDisco, duracaoFita, duracaoImpressora);
+    arrayProcessos = (Processo*) malloc(sizeof(Processo)*quantidadeProcessos);
 
-    for (int i = 0; i < quantidadeProcessos; i++) {
-        admitirProcesso(criarProcesso(criaPid(), 0, quantum));
+    for(int i = 0; i < quantidadeProcessos; i++) {
+        arrayProcessos[i] = criarProcesso(criaPid(), 0, quantum);
     }
 }
 
 void executarCiclo() {
+    //percorre processos e ativa os processos que forem criados na iteração atual
+    for(int i = 0; i < totalProcessos; i++){
+        if(arrayProcessos[i]->momentoAtivacao == relogio){
+            admitirProcesso(arrayProcessos[i]);
+        }    
+    }
 
     //se nao houver processo na cpu
     if (getProcessoEmExecucao() == NULL) {
