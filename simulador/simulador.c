@@ -146,6 +146,7 @@ void executarCiclo() {
         Processo* processoIO = dispositivoExecutarUnidade(i);
         //se a funcao retornou processo, entao o IO acabou
         if(processoIO != NULL){
+            processoIO->cpuTimeRestante = quantum;
             admitirProcesso(processoIO);
         }
      }
@@ -154,7 +155,7 @@ void executarCiclo() {
     if(relogio % tempoBoostPrioridade == 0){
         boostPrioridade();
     }
-    
+
     registrarLinhaTempoCpu(getProcessoEmExecucao());
     relogio++;
 }

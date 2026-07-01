@@ -15,10 +15,12 @@ int main(int argc, char *argv[]) {
 
         if(quantidadeProcessos<=0){
             printf("Aviso: Quantidade de processos inválida.");
+            return 1; 
         }
 
         if(quantum<=0){
             printf("Aviso: Quantum inválido.");
+            return 1; 
         }
 
     }else {
