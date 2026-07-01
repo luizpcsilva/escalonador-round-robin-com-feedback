@@ -11,8 +11,9 @@ static int totalProcessos = 0;
 static int processosFinalizados = 0;
 static int quantum;
 static const char* NOMES_IO[] = {"DISCO", "FITA", "IMP", "SEM IO"};
+static Processo** arrayProcessos = NULL;
 
-static void gerarRelatorioProcessos(void) {
+static void gerarRelatorioProcessos() {
     FILE *arquivo = fopen("relatorio_processos.txt", "w");
     if (arquivo == NULL) {
         printf("Erro ao criar o arquivo\n");
@@ -44,7 +45,7 @@ static void gerarRelatorioProcessos(void) {
     fclose(arquivo);
     printf("\nRelatório gerado em 'relatorio_processos.txt'\n");
 }
-static Processo** arrayProcessos;
+
 
 static void atualizarProcessoCpu() {
     
@@ -59,7 +60,7 @@ void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int durac
 
 
     bootDispositivos(duracaoDisco, duracaoFita, duracaoImpressora);
-    arrayProcessos = (Processo*) malloc(sizeof(Processo*)*quantidadeProcessos);
+    arrayProcessos = (Processo**) malloc(sizeof(Processo*)*quantidadeProcessos);
 
     for(int i = 0; i < quantidadeProcessos; i++) {
         arrayProcessos[i] = criarProcesso(criaPid(), 0, quantum);
@@ -81,10 +82,10 @@ void executarCiclo() {
         processoEmExecucao = getProcessoEmExecucao();
     }
     //se apos iniciar execucao de novo houver processo na cpu
-    if(getProcessoEmExecucao()!=NULL){
+    if(processoEmExecucao!=NULL){
         //atualiza timers
-        getProcessoEmExecucao()->tempoDecorrido ++;
-        getProcessoEmExecucao()->cpuTimeRestante --;
+        processoEmExecucao->tempoDecorrido ++;
+        processoEmExecucao->cpuTimeRestante --;
 
         //se processo acabou
         if (processoEmExecucao->tempoDecorrido == processoEmExecucao->tempoTotal) {
@@ -107,7 +108,7 @@ void executarCiclo() {
             }
         }
     }
-    }
+    
 
     //atualiza o estado dos processos executando IO
     for(int i = 0; i < QTD_DISPOSITIVOS; i++) { //para cada dispositivo de IO
