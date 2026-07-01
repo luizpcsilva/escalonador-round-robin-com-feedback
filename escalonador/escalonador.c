@@ -2,7 +2,7 @@
 #include "processo/processo.h"
 #include "fila/fila.h"
 #include <stdlib.h>
-#include "constants.h"
+#include "../constants.h"
 
 static Processo* processoEmExecucao = NULL;
 static FilaProcessos* arrayFilas[QTD_FILAS];
@@ -34,11 +34,10 @@ void iniciaExecucaoNovoProcesso(){
     }   
 }
 
-void aplicaPreempsao(int quantum){
+void aplicaPreempsao(){
     if(processoEmExecucao->prioridade < QTD_FILAS){
         processoEmExecucao->prioridade += 1;
     } 
-    processoEmExecucao->cpuTimeRestante = quantum;
 
     //adiciona ele no fim da nova fila de prioridade
     enfileirarProcesso(processoEmExecucao, arrayFilas[processoEmExecucao->prioridade]);

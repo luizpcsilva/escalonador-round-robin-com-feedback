@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "simulador.h"
-#include "io/io.h" 
-#include "fila/fila.h" 
-#include "processo/processo.h"
-#include "escalonador/escalonador.h"
+#include "io.h" 
+#include "fila.h" 
+#include "processo.h"
+#include "escalonador.h"
 
 static int relogio = 0;
 static int totalProcessos = 0;
@@ -13,23 +13,6 @@ static int quantum;
 
 static void atualizarProcessoCpu() {
     
-    processoAtualCpu->tempoDecorrido++;
-    quantumRestante--;
-    
-    printf("  CPU: P%d [%d/%d] Q:%d\n", processoAtualCpu->pid, processoAtualCpu->tempoDecorrido, processoAtualCpu->tempoTotal, quantumRestante);
-
-    if (processoFinalizado(processoAtualCpu)) {
-        processoAtualCpu->status = TERMINOU;
-        processosFinalizados++;
-        processoAtualCpu = NULL;
-    } else if (processoDeveSolicitarIO(processoAtualCpu)) {
-        enviarParaIo(processoAtualCpu);
-        processoAtualCpu = NULL;
-    } else if (quantumRestante <= 0) {
-        Processo *aux = processoAtualCpu;
-        processoAtualCpu = NULL;
-        retornarParaEscalonador(aux, RETORNO_PREEMPCAO);
-    }
 }
 
 void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int duracaoDisco, int duracaoFita, int duracaoImpressora, int tempoMinServico, int tempoMaxServico) {
