@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "simulador.h"
-#include "io.h" 
-#include "fila.h" 
-#include "processo.h"
-#include "escalonador.h"
+#include "io/io.h" 
+#include "fila/fila.h" 
+#include "processo/processo.h"
+#include "escalonador/escalonador.h"
 
 static int relogio = 0;
 static int totalProcessos = 0;
