@@ -3,11 +3,19 @@
 #include "processo.h"
 
 // função que gera o tempo total de um processo, de forma aleatoria, multiplicando o quantum
-int calcTempo(int quantum){
+int calcTempo(int quantum, flagTempo flag){
 
-    int n = (int) rand() % 8 +1; // o processo sdeve ter no máximo 8 vezes um quantum de tempo total
-    int aux = (int) rand() % ((n * quantum +1) +1); // o tamanho do tempo total é o quantum n vezes
-    return aux;
+    // se a flag for 0, então estamos calculando o tempo de cpu que não pode ser 0
+    if( flag == TEMPO_EXECUÇÃO){
+        int n = (int) rand() % 8 +1; // o processo sdeve ter no máximo 8 vezes um quantum de tempo total
+        int aux = (int) rand() % (n * quantum +1) +1; // o tamanho do tempo total é o quantum n vezes
+        return aux;
+    } // se a flag for diferente, então temos que calcular o tempo de io que pode ser 0
+    else{
+        int n = (int) rand() % 8 +1; // o processo sdeve ter no máximo 8 vezes um quantum de tempo de io
+        int aux = (int) rand() % (n * quantum +1); // o tamanho do tempo de io é o quantum n vezes
+        return aux;
+    }
 }
 
 /* função que calcula o tempo necessário para io, de forma aleatoria, com base no tempo total do processo
@@ -25,7 +33,7 @@ int calcMomentoIO(int tempoTotalProcesso){
         return 0;
     }
     else{
-        int max = tempoTotalProcesso;
+        int max = tempoTotalProcesso -1;
         int min = 1; 
         int aux = (int) rand() % (max - min +1) +min; // gera o momento em que o processo vai precisar de io: [1, tempoTotalProcesso-1]
         return aux;
@@ -75,6 +83,14 @@ void imprimirProcesso(Processo *processo) {
     return;
 }
 
+int calcTempoAtivacao(int quantum){
+
+    int n = 3;
+    int aux = (int) rand() % (n*quantum); // calcula o tempo de ativação sendo entre 0 e n x quantum -1
+    return aux;
+
+}
+
 Processo *criarProcesso(int PID, int PPID, int quantum){ // utilizar no main a função criaPid como parâmetro de criarProcesso
     
     Processo *novoProcesso = (Processo*) malloc(sizeof(Processo)); // aloca espaço para o processo
@@ -100,9 +116,14 @@ Processo *criarProcesso(int PID, int PPID, int quantum){ // utilizar no main a f
     /*
         como o tempo de io pode ser maior do que o tempo de execução e vice versa 
         então faz sentido utilizar a mesma função para calcular o tempo dos dois.
+        a flag inicia com 0, pois primeiro calculamos o tempo de execução
     */
-    novoProcesso->tempoTotal = calcTempo(quantum); // gera o tempo de execução do processo com base no quantum
-    novoProcesso->tempoIO = calcTempo(quantum); // gera um tempo de io com base no quantum
+
+    flagTempo flag= TEMPO_EXECUÇÃO;
+    novoProcesso->tempoTotal = calcTempo(quantum, flag); // gera o tempo de execução do processo com base no quantum
+
+    flag = TEMPO_IO; 
+    novoProcesso->tempoIO = calcTempo(quantum, flag); // gera um tempo de io com base no quantum
 
     if(novoProcesso->tempoIO == 0){
         novoProcesso->momentoIO = 0;
@@ -118,7 +139,8 @@ Processo *criarProcesso(int PID, int PPID, int quantum){ // utilizar no main a f
     else{
         novoProcesso->tipoIO = (tipoIOProcesso) rand() % 3;
     }
-    novoProcesso->cpuTimeRestante = novoProcesso->tempoTotal;
+    novoProcesso->momentoAtivacao = calcTempoAtivacao(quantum);
+    novoProcesso->cpuTimeRestante = quantum;
 
     return novoProcesso;
 
