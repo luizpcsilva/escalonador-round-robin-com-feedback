@@ -1,7 +1,6 @@
 #ifndef SIMULADOR_H
 #define SIMULADOR_H
 
-#define QTD_FILAS 2 
 
 typedef enum {
     FILA_BAIXA = 0,
@@ -15,7 +14,7 @@ typedef enum {
     RETORNO_PREEMPCAO = -1
 } MotivoRetorno;
 
-void inicializarSimulador(int quantidadeProcessos, int quantum, int duracaoDisco, int duracaoFita, int duracaoImpressora, int tempoMinServico, int tempoMaxServico);
+void inicializarSimulador(int quantidadeProcessos, int quantum, int duracaoDisco, int duracaoFita, int duracaoImpressora);
 
 void executarSimulacao(void);
 

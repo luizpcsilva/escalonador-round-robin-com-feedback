@@ -22,14 +22,14 @@ typedef struct Processo{
     statusProcesso status;
     int prioridade;
     int tempoTotal; //somatorio do tempo que o processo precisa
-    int tempoDecorrido; //somatorio do tempo de execução do processo
+    int tempoDecorrido; //tempo dentro de um quantum
     int momentoIO; //momento em que o processo vai parar para fazer IO
     int tempoIO; //tempo que o processo precisa para fazer IO
     tipoIOProcesso tipoIO;
     int cpuTimeRestante; //tempo em execucao restante ate completar um quantum
 } Processo;
 
-Processo *criarProcesso(int pid, int ppid);
+Processo *criarProcesso(int pid, int ppid, int quantum);
 
 void destruirProcesso(Processo *processo);
 
