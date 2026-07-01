@@ -2,7 +2,7 @@
 #include "processo/processo.h"
 #include "fila/fila.h"
 #include <stdlib.h>
-#include "../constants.h"
+#include "constants.h"
 
 static Processo* processoEmExecucao = NULL;
 static FilaProcessos* arrayFilas[QTD_FILAS];
@@ -29,7 +29,8 @@ void iniciaExecucaoNovoProcesso(){
             continue;
         }
         processoEmExecucao = processoP;
-        processoEmExecucao->status = EXECUCAO;
+        processoEmExecucao->status = EXECUCAO;  
+        break;
     }   
 }
 
@@ -48,7 +49,7 @@ void aplicaPreempsao(int quantum){
 
 void bloquearProcesso(){
     processoEmExecucao -> status = BLOQUEADO;
-    //TODO: Enviar para fila de IO correspondente
+    dispositivoReceberProcesso(processoEmExecucao, processoEmExecucao->tipoIO);  
     iniciaExecucaoNovoProcesso();
 }
 
@@ -59,12 +60,13 @@ void finalizarProcesso(){
 }
 
 void admitirProcesso(Processo* processoP){
-    processoP->status = PRONTO;
-    processoP->prioridade = 0;
-
     if(processoP->status == BLOQUEADO && processoP->tipoIO == DISCO){
         processoP->prioridade = QTD_FILAS-1;
     }
+    else{
+        processoP->prioridade = 0;
+    }
+    processoP->status = PRONTO;
     
     enfileirarProcesso(processoP, arrayFilas[0]);
 }
