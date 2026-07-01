@@ -6,7 +6,16 @@
 
 static Processo* processoEmExecucao = NULL;
 static FilaProcessos* arrayFilas[QTD_FILAS];
+static Processo** todosProcessos = NULL;
+static int totalProcessosEscalonador = 0;
 
+Processo** getTodosProcessos() {
+    return todosProcessos;
+}
+
+int getTotalProcessosEscalonador() {
+    return totalProcessosEscalonador;
+}
 
 Processo* getProcessoEmExecucao(){
     return processoEmExecucao;
@@ -29,15 +38,15 @@ void iniciaExecucaoNovoProcesso(){
             continue;
         }
         processoEmExecucao = processoP;
-        processoEmExecucao->status = EXECUCAO;
+        processoEmExecucao->status = EXECUCAO;  
+        break;
     }   
 }
 
 void aplicaPreempsao(){
-    if(processoEmExecucao->prioridade < QTD_FILAS){
+    if(processoEmExecucao->prioridade < QTD_FILAS - 1){
         processoEmExecucao->prioridade += 1;
     } 
-    processoEmExecucao->cpuTimeRestante = QUANTUM;
 
     //adiciona ele no fim da nova fila de prioridade
     enfileirarProcesso(processoEmExecucao, arrayFilas[processoEmExecucao->prioridade]);
@@ -48,7 +57,7 @@ void aplicaPreempsao(){
 
 void bloquearProcesso(){
     processoEmExecucao -> status = BLOQUEADO;
-    //TODO: Enviar para fila de IO correspondente
+    dispositivoReceberProcesso(processoEmExecucao, processoEmExecucao->tipoIO);  
     iniciaExecucaoNovoProcesso();
 }
 
@@ -59,14 +68,21 @@ void finalizarProcesso(){
 }
 
 void admitirProcesso(Processo* processoP){
-    processoP->status = PRONTO;
-    processoP->prioridade = 0;
-
+    if(processoP->status == NOVO) {
+        todosProcessos = (Processo**) realloc(todosProcessos, sizeof(Processo*) * (totalProcessosEscalonador + 1));
+        todosProcessos[totalProcessosEscalonador] = processoP;
+        totalProcessosEscalonador++;
+    }
+    
     if(processoP->status == BLOQUEADO && processoP->tipoIO == DISCO){
         processoP->prioridade = QTD_FILAS-1;
     }
+    else{
+        processoP->prioridade = 0;
+    }
+    processoP->status = PRONTO;
     
-    enfileirarProcesso(processoP, arrayFilas[0]);
+    enfileirarProcesso(processoP, arrayFilas[processoP->prioridade]);
 }
 
 void boostPrioridade(){

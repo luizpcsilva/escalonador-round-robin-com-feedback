@@ -20,7 +20,7 @@ void bootDispositivos(int duracaoDisco, int duracaoFita, int duracaoImpressora);
 
 void dispositivoReceberProcesso(Processo *processo, int tipoIo);
 
-void dispositivoExecutarUnidade(int tipoIo);
+Processo* dispositivoExecutarUnidade(int tipoIo);
 
 int dispositivoOperacaoTerminou(int tipoIo);
 

@@ -5,6 +5,10 @@ typedef struct Processo Processo;
 
 Processo* getProcessoEmExecucao();
 
+Processo** getTodosProcessos();
+
+int getTotalProcessosEscalonador();
+
 void bootEscalonador();
 
 //aplica a preempsao caso o quantum acabe ou a fatia de tempo do processo em execução acabe
