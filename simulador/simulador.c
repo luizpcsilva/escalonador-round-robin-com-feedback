@@ -50,17 +50,19 @@ static void gerarRelatorioProcessos() {
     Processo **todosProcessos = getTodosProcessos();
     int total = getTotalProcessosEscalonador();
 
-    fprintf(arquivo, "Processo | Ativação | T. Serviço | T. IO | Início CPU | Fim CPU\n");
-    fprintf(arquivo, "---------|----------|------------|-------|------------|--------\n");
+    fprintf(arquivo, "Processo | Ativação | T. Serviço | T. IO | Início CPU | Fim CPU | Turnaround\n");
+    fprintf(arquivo, "---------|----------|------------|-------|------------|--------|-------\n");
 
     for (int i = 0; i < total; i++) {
         Processo *p = todosProcessos[i];
         
         const char* nomeIO = NOMES_IO[p->tipoIO];
 
-        int momentoFim = p->momentoFimExecucao;
+        int inicioCpu = p->momentoAtivacao;
+        int fimCpu = p->momentoFimExecucao;
+        int turnaround = fimCpu - inicioCpu;
 
-        fprintf(arquivo, "  P%-4d |   %3d   |    %3d    |  %-5s |    %3d    |   %3d\n", p->pid, p->momentoAtivacao, p->tempoTotal, nomeIO, p->momentoAtivacao, momentoFim);
+        fprintf(arquivo, "  P%-4d |   %3d   |    %3d    |  %-5s |    %3d    |   %3d |  %3d\n", p->pid, p->momentoAtivacao, p->tempoTotal, nomeIO, inicioCpu, fimCpu, turnaround);
     }
 
     fprintf(arquivo, "------------------------------------------------------------\n");
