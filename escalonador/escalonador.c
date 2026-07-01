@@ -35,7 +35,7 @@ void iniciaExecucaoNovoProcesso(){
 }
 
 void aplicaPreempsao(){
-    if(processoEmExecucao->prioridade < QTD_FILAS){
+    if(processoEmExecucao->prioridade < QTD_FILAS - 1){
         processoEmExecucao->prioridade += 1;
     } 
 

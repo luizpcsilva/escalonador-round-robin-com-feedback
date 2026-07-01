@@ -49,7 +49,7 @@ void executarCiclo() {
         }
         //acabou o quantum
         else if (getProcessoEmExecucao()->cpuTimeRestante == 0) {
-            aplicarPreempsao();
+            aplicaPreempsao();
             getProcessoEmExecucao()->cpuTimeRestante = quantum;
     }
     getProcessoEmExecucao()->tempoDecorrido ++;
