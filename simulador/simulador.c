@@ -19,6 +19,12 @@ static int tamanhoLinhaTempo = 0;
 static int* processosTerminados = NULL; 
 static int tamanhoTerminados = 0; 
 
+int compararPorPid(const void *a, const void *b) {
+    Processo *pa = *(Processo**)a;
+    Processo *pb = *(Processo**)b;
+    return pa->pid - pb->pid;  
+}
+
 static void garantirEspacoArray(int **array, int *tamanho, int instante) {
     if (instante < *tamanho) {
         return;
@@ -96,7 +102,7 @@ static void gerarLinhaTempoCpu() {
         if (t < tamanhoTerminados) {
             terminou = processosTerminados[t];
         }
-        
+
         fprintf(arquivo, "%d %d %d\n", t, pid, terminou);
     }
 
@@ -114,11 +120,18 @@ static void gerarRelatorioProcessos() {
     Processo **todosProcessos = getTodosProcessos();
     int total = getTotalProcessosEscalonador();
 
+    Processo **ordenados = malloc(sizeof(Processo*) * total);
+    for (int i = 0; i < total; i++) {
+        ordenados[i] = todosProcessos[i];
+    }
+
+    qsort(ordenados, total, sizeof(Processo*), compararPorPid);
+
     fprintf(arquivo, "Processo | Ativação | T. Serviço | T. IO | Momento IO| Início CPU | Fim CPU | Turnaround\n");
     fprintf(arquivo, "---------|----------|------------|-------|-----------|------------|---------|-----------\n");
 
     for (int i = 0; i < total; i++) {
-        Processo *p = todosProcessos[i];
+        Processo *p = ordenados[i];
         
         const char* nomeIO = NOMES_IO[p->tipoIO];
 
@@ -137,6 +150,7 @@ static void gerarRelatorioProcessos() {
 
     fclose(arquivo);
     printf("\nRelatório gerado em 'relatorio_processos.txt'\n");
+    free(ordenados);
 }
 
 
