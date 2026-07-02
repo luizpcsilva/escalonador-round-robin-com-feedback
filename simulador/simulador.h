@@ -28,4 +28,5 @@ void liberarMemoria();
 
 int getQuantum(void);
 
+int getRelogio();
 #endif 

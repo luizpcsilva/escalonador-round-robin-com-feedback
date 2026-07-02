@@ -42,8 +42,13 @@ void iniciaExecucaoNovoProcesso(){
             continue;
         }
         processoEmExecucao = processoP;
+        //checa se é a primeira execução do processo
+        if(processoP->tempoDecorrido ==0){
+            processoP->momentoInicioExecucao = getRelogio();
+        }
         processoEmExecucao->cpuTimeRestante = getQuantum();
-        processoEmExecucao->status = EXECUCAO;  
+        processoEmExecucao->status = EXECUCAO;
+        
         break;
     }   
 }

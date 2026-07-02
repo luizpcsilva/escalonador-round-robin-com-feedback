@@ -121,12 +121,16 @@ static void gerarRelatorioProcessos() {
         Processo *p = todosProcessos[i];
         
         const char* nomeIO = NOMES_IO[p->tipoIO];
+        //se nao houver IO
+        if(p->momentoIO == -1){
+            nomeIO = "Sem IO";
+        }
 
-        int inicioCpu = p->momentoAtivacao;
+        int inicioCpu = p->momentoInicioExecucao;
         int fimCpu = p->momentoFimExecucao;
         int turnaround = fimCpu - inicioCpu;
 
-        fprintf(arquivo, "  P%-4d |   %3d   |    %3d    |  %-5s |    %3d    |    %3d    |     %3d     |  %3d\n", p->pid, p->momentoAtivacao, p->tempoTotal, nomeIO, p->momentoIO, inicioCpu ,fimCpu, turnaround);
+        fprintf(arquivo, "  P%-4d |   %3d   |    %3d    |  %-5s |    %3d    |    %3d    |     %3d     |  %3d\n", p->pid, p->momentoAtivacao, p->tempoTotal, nomeIO, p->momentoIO, p->momentoInicioExecucao ,fimCpu, turnaround);
     }
 
     fprintf(arquivo, "------------------------------------------------------------\n");
@@ -142,6 +146,10 @@ static void gerarRelatorioProcessos() {
 
 int getQuantum() {
     return quantum;
+}
+
+int getRelogio(){
+    return relogio;
 }
 
 void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int duracaoDisco, int duracaoFita, int duracaoImpressora) {
