@@ -44,14 +44,18 @@ void imprimirProcesso(Processo *processo);
 
 void mudarStatusProcesso(Processo *processo, statusProcesso novoStatus);
 
-int calcTempoTotal(int quantum);
+int calcTempo(int quantum);
 
-int calcTempoIO (int tempoTotalProcesso);
+int calcMomentoIO(int tempoTotalProcesso);
 
-int calcMomentoIO (int tempoTotalProcesso);
+int calcTempoIODisco(int tempoTotalProcesso);
+
+int calcTempoIOImpressora(int tempoTotalProcesso);
+
+int calcTempoIOFita(int tempoTotalProcesso);
 
 int criaPid ();
 
 int calcTempoAtivacao(int quantum);
 
-#endif 
+#endif
