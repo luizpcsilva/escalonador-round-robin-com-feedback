@@ -1,5 +1,6 @@
 #ifndef FILA_H
 #define FILA_H
+#include "../constants.h"
 
 //fazendo forward declaration de processo
 typedef struct Processo Processo;
@@ -19,8 +20,9 @@ FilaProcessos* criarFila();
 
 void enfileirarProcesso(Processo* processoP, FilaProcessos* filaP);
 
-Processo* desenfileirarProcesso(FilaProcessos* filaP);
 
+
+Processo* desenfileirarProcesso(FilaProcessos* filaP);
 
 Processo* consultarInicioFila(FilaProcessos* filaP);
 

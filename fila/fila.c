@@ -1,5 +1,6 @@
 #include "fila.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 FilaProcessos* criarFila(){
     FilaProcessos* fila = (FilaProcessos*) malloc(sizeof(FilaProcessos));
@@ -9,6 +10,8 @@ FilaProcessos* criarFila(){
 
     return fila;
 }
+
+
 
 void enfileirarProcesso(Processo* processoP, FilaProcessos* filaP){
     ElemFila* elementoP = (ElemFila*) malloc(sizeof(ElemFila));

@@ -5,6 +5,7 @@
 #include "../constants.h"
 #include "../simulador/simulador.h"
 #include "../io/io.h"
+#include <stdio.h>
 
 static Processo* processoEmExecucao = NULL;
 static FilaProcessos* arrayFilas[QTD_FILAS];
@@ -14,6 +15,34 @@ static int totalProcessosEscalonador = 0;
 
 Processo** getTodosProcessos() {
     return todosProcessos;
+}
+
+FilaProcessos** getArrayFilas(){
+    return arrayFilas;
+}
+
+void salvarEstadoFilas(int relogio) {
+    FILE *arquivo = fopen("historico_filas.txt", "a"); // Abre para adicionar (append)
+    if (arquivo == NULL) return;
+
+    fprintf(arquivo, "\n[Relógio: %d]\n", relogio);
+    
+    for (int i = 0; i < QTD_FILAS; i++) {
+        fprintf(arquivo, "Fila %d: ", i);
+        
+        ElemFila* atual = arrayFilas[i]->inicio;
+        if (atual == NULL) {
+            fprintf(arquivo, "Vazia");
+        } else {
+            while (atual != NULL) {
+                fprintf(arquivo, "[P%d] ", atual->processoP->pid);
+                atual = atual->proximo;
+            }
+        }
+        fprintf(arquivo, "\n");
+    }
+    fprintf(arquivo, "---------------------------\n");
+    fclose(arquivo);
 }
 
 int getTotalProcessosEscalonador() {
@@ -41,8 +70,13 @@ void iniciaExecucaoNovoProcesso(){
             continue;
         }
         processoEmExecucao = processoP;
+        //checa se é a primeira execução do processo
+        if(processoP->tempoDecorrido ==0){
+            processoP->momentoInicioExecucao = getRelogio();
+        }
         processoEmExecucao->cpuTimeRestante = getQuantum();
-        processoEmExecucao->status = EXECUCAO;  
+        processoEmExecucao->status = EXECUCAO;
+        
         break;
     }   
 }
@@ -85,8 +119,17 @@ void admitirProcesso(Processo* processoP){
         processoP->prioridade = 0;
     }
     processoP->status = PRONTO;
-    
+
     enfileirarProcesso(processoP, arrayFilas[processoP->prioridade]);
+
+    // Se há alguém na CPU e o processo recém-chegado tem prioridade maior
+    if (processoEmExecucao != NULL && processoP->prioridade < processoEmExecucao->prioridade) {
+        //enfileira processo atual e inicia execucao do novo
+        processoEmExecucao->status = PRONTO;
+        enfileirarProcesso(processoEmExecucao, arrayFilas[processoEmExecucao->prioridade]);
+        iniciaExecucaoNovoProcesso();
+    }
+
 }
 
 void boostPrioridade(){
