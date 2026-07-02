@@ -7,6 +7,10 @@
 //forward declaration de processo
 typedef struct Processo Processo;
 
+FilaProcessos** getArrayFilas();
+
+void salvarEstadoFilas(int relogio);
+
 Processo* getProcessoEmExecucao();
 
 Processo** getTodosProcessos();

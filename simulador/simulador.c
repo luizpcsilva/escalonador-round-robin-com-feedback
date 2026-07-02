@@ -172,7 +172,7 @@ void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int durac
     }
 
     //calcula tempo para boost de prioridade
-    tempoBoostPrioridade = quantumEntrada * quantidadeProcessos * 5;
+    tempoBoostPrioridade = quantumEntrada * quantidadeProcessos;
 }
 
 void executarCiclo() {
@@ -238,7 +238,7 @@ void executarCiclo() {
         boostPrioridade();
     }
 
-    
+    salvarEstadoFilas(relogio);
     relogio++;
 }
 

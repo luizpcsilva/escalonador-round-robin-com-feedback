@@ -5,6 +5,7 @@
 #include "../constants.h"
 #include "../simulador/simulador.h"
 #include "../io/io.h"
+#include <stdio.h>
 
 static Processo* processoEmExecucao = NULL;
 static FilaProcessos* arrayFilas[QTD_FILAS];
@@ -16,6 +17,33 @@ Processo** getTodosProcessos() {
     return todosProcessos;
 }
 
+FilaProcessos** getArrayFilas(){
+    return arrayFilas;
+}
+
+void salvarEstadoFilas(int relogio) {
+    FILE *arquivo = fopen("historico_filas.txt", "a"); // Abre para adicionar (append)
+    if (arquivo == NULL) return;
+
+    fprintf(arquivo, "\n[Relógio: %d]\n", relogio);
+    
+    for (int i = 0; i < QTD_FILAS; i++) {
+        fprintf(arquivo, "Fila %d: ", i);
+        
+        ElemFila* atual = arrayFilas[i]->inicio;
+        if (atual == NULL) {
+            fprintf(arquivo, "Vazia");
+        } else {
+            while (atual != NULL) {
+                fprintf(arquivo, "[P%d] ", atual->processoP->pid);
+                atual = atual->proximo;
+            }
+        }
+        fprintf(arquivo, "\n");
+    }
+    fprintf(arquivo, "---------------------------\n");
+    fclose(arquivo);
+}
 
 int getTotalProcessosEscalonador() {
     return totalProcessosEscalonador;
@@ -101,6 +129,7 @@ void admitirProcesso(Processo* processoP){
         enfileirarProcesso(processoEmExecucao, arrayFilas[processoEmExecucao->prioridade]);
         iniciaExecucaoNovoProcesso();
     }
+
 }
 
 void boostPrioridade(){
