@@ -114,7 +114,7 @@ static void gerarRelatorioProcessos() {
     Processo **todosProcessos = getTodosProcessos();
     int total = getTotalProcessosEscalonador();
 
-    fprintf(arquivo, "Processo | Ativação | T. Serviço | T. IO | Momento IO| Início CPU | Fim CPU | Turnaround\n");
+    fprintf(arquivo, "Processo | Ativação | T. Serviço | T. IO | Momento IO| TEMPO IO| Início CPU | Fim CPU | Turnaround\n");
     fprintf(arquivo, "---------|----------|------------|-------|-----------|------------|---------|-----------\n");
 
     for (int i = 0; i < total; i++) {
@@ -130,7 +130,7 @@ static void gerarRelatorioProcessos() {
         int fimCpu = p->momentoFimExecucao;
         int turnaround = fimCpu - inicioCpu;
 
-        fprintf(arquivo, "  P%-4d |   %3d   |    %3d    |  %-5s |    %3d    |    %3d    |     %3d     |  %3d\n", p->pid, p->momentoAtivacao, p->tempoTotal, nomeIO, p->momentoIO, p->momentoInicioExecucao ,fimCpu, turnaround);
+        fprintf(arquivo, "  P%-4d |   %3d   |    %3d    |  %-5s |    %3d    |     %3d    |    %3d    |     %3d     |  %3d\n", p->pid, p->momentoAtivacao, p->tempoTotal, nomeIO, p->momentoIO,p->duracaoIO, p->momentoInicioExecucao ,fimCpu, turnaround);
     }
 
     fprintf(arquivo, "------------------------------------------------------------\n");
@@ -227,7 +227,6 @@ void executarCiclo() {
         Processo* processoIO = dispositivoExecutarUnidade(i);
         //se a funcao retornou processo, entao o IO acabou
         if(processoIO != NULL){
-            processoIO->cpuTimeRestante = quantum;
             admitirProcesso(processoIO);
         }
      }

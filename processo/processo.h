@@ -30,6 +30,7 @@ typedef struct Processo{
     int tempoDecorrido; //tempo dentro de um quantum
     int momentoIO; //momento em que o processo vai parar para fazer IO
     int tempoIO; //tempo que o processo precisa para fazer IO
+    int duracaoIO;
     int momentoInicioExecucao;
     tipoIOProcesso tipoIO;
     int momentoAtivacao;

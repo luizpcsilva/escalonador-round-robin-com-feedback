@@ -74,7 +74,10 @@ void iniciaExecucaoNovoProcesso(){
         if(processoP->tempoDecorrido ==0){
             processoP->momentoInicioExecucao = getRelogio();
         }
-        processoEmExecucao->cpuTimeRestante = getQuantum();
+        if(processoEmExecucao->cpuTimeRestante==0){
+            processoEmExecucao->cpuTimeRestante = getQuantum();
+        }
+        
         processoEmExecucao->status = EXECUCAO;
         
         break;

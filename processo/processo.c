@@ -148,6 +148,8 @@ Processo *criarProcesso(int PID, int PPID, int quantum){ // utilizar no main a f
         novoProcesso->tempoIO = 0; // quando o tipo é SEM_IO
     }
 
+    novoProcesso->duracaoIO = novoProcesso->tempoIO;
+
 
     if(novoProcesso->tempoIO == 0){
         novoProcesso->momentoIO = -1;
