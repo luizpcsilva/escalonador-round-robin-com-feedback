@@ -2,20 +2,34 @@
 #include <stdlib.h>
 #include "processo.h"
 
-// função que gera o tempo total de um processo, de forma aleatoria, multiplicando o quantum
-int calcTempo(int quantum, flagTempo flag){
+// função que gera o tempo de execução de um processo, de forma aleatoria, multiplicando o quantum
+int calcTempo(int quantum){
 
-    // se a flag for 0, então estamos calculando o tempo de cpu que não pode ser 0
-    if( flag == TEMPO_EXECUCÃO){
-        int n = (int) rand() % 8 +1; // o processo sdeve ter no máximo 8 vezes um quantum de tempo total
-        int aux = (int) rand() % (n * quantum +1) +1; // o tamanho do tempo total é o quantum n vezes
-        return aux;
-    } // se a flag for diferente, então temos que calcular o tempo de io que pode ser 0
-    else{
-        int n = (int) rand() % 8 +1; // o processo sdeve ter no máximo 8 vezes um quantum de tempo de io
-        int aux = (int) rand() % (n * quantum +1); // o tamanho do tempo de io é o quantum n vezes
-        return aux;
-    }
+    int n = (int) rand() % 8 +1; // o processo sdeve ter no máximo 8 vezes um quantum de tempo total
+    int aux = (int) rand() % (n * quantum +1) +1; // o tamanho do tempo total é o quantum n vezes
+    return aux;
+
+}
+
+int calcTempoIODisco(int quantum){
+
+    int n = (int) rand() % 2 +1; // o processo deve ter no máximo 2 vezes um quantum de tempo de io para disco
+    int aux = (int) rand() % (n * quantum +1) +5; // o tamanho do tempo de io é o quantum n vezes
+    return aux;
+}
+
+int calcTempoIOImpressora(int quantum){
+
+    int n = (int) rand() % 4 +1; // o processo deve ter no máximo 4 vezes um quantum de tempo de io para disco
+    int aux = (int) rand() % (n * quantum +1) +10; // o tamanho do tempo de io é o quantum n vezes
+    return aux;
+}
+
+int calcTempoIOFita(int quantum){
+
+    int n = (int) rand() % 8 +1; // o processo deve ter no máximo 8 vezes um quantum de tempo de io para disco
+    int aux = (int) rand() % (n * quantum +1) +20; // o tamanho do tempo de io é o quantum n vezes
+    return aux;
 }
 
 /* função que calcula o tempo necessário para io, de forma aleatoria, com base no tempo total do processo
@@ -119,11 +133,21 @@ Processo *criarProcesso(int PID, int PPID, int quantum){ // utilizar no main a f
         a flag inicia com 0, pois primeiro calculamos o tempo de execução
     */
 
-    flagTempo flag= TEMPO_EXECUCÃO;
-    novoProcesso->tempoTotal = calcTempo(quantum, flag); // gera o tempo de execução do processo com base no quantum
+    novoProcesso->tempoTotal = calcTempo(quantum); // gera o tempo de execução do processo com base no quantum
 
-    flag = TEMPO_IO; 
-    novoProcesso->tempoIO = calcTempo(quantum, flag); // gera um tempo de io com base no quantum
+    novoProcesso->tipoIO = (tipoIOProcesso) rand() % 4;
+    if(novoProcesso->tipoIO == DISCO){
+        novoProcesso->tempoIO = calcTempoIODisco(quantum);
+    }
+    else if(novoProcesso->tipoIO == IMPRESSORA){
+        novoProcesso->tempoIO = calcTempoIOImpressora(quantum);
+
+    }else if(novoProcesso->tipoIO == FITA_MAGNETICA){
+        novoProcesso->tempoIO = calcTempoIOFita(quantum);
+    }else{
+        novoProcesso->tempoIO = 0; // quando o tipo é SEM_IO
+    }
+
 
     if(novoProcesso->tempoIO == 0){
         novoProcesso->momentoIO = -1;
@@ -133,12 +157,12 @@ Processo *criarProcesso(int PID, int PPID, int quantum){ // utilizar no main a f
                                                                           // parar para fazer io com base no tempo total
     }
 
-    if(novoProcesso->momentoIO == 0){ // se o processo não tem momento io, então não há necessidade de atribuir um tipoIO
+    if(novoProcesso->momentoIO == -1){ // se o processo não tem momento io, então não há necessidade de atribuir um tipoIO
         novoProcesso->tipoIO = SEM_IO;
+        novoProcesso->tempoIO = 0;
+
     }
-    else{
-        novoProcesso->tipoIO = (tipoIOProcesso) rand() % 3;
-    }
+
     novoProcesso->momentoAtivacao = calcTempoAtivacao(quantum);
     novoProcesso->cpuTimeRestante = quantum;
     novoProcesso->momentoFimExecucao = 0;
