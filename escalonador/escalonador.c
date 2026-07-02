@@ -16,6 +16,7 @@ Processo** getTodosProcessos() {
     return todosProcessos;
 }
 
+
 int getTotalProcessosEscalonador() {
     return totalProcessosEscalonador;
 }
@@ -85,8 +86,16 @@ void admitirProcesso(Processo* processoP){
         processoP->prioridade = 0;
     }
     processoP->status = PRONTO;
-    
+
     enfileirarProcesso(processoP, arrayFilas[processoP->prioridade]);
+
+    // Se há alguém na CPU e o processo recém-chegado tem prioridade maior
+    if (processoEmExecucao != NULL && processoP->prioridade < processoEmExecucao->prioridade) {
+        //enfileira processo atual e inicia execucao do novo
+        processoEmExecucao->status = PRONTO;
+        enfileirarProcesso(processoEmExecucao, arrayFilas[processoEmExecucao->prioridade]);
+        iniciaExecucaoNovoProcesso();
+    }
 }
 
 void boostPrioridade(){

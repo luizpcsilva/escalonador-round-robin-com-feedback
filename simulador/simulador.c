@@ -52,8 +52,8 @@ static void gerarRelatorioProcessos() {
     Processo **todosProcessos = getTodosProcessos();
     int total = getTotalProcessosEscalonador();
 
-    fprintf(arquivo, "Processo | Ativação | T. Serviço | T. IO | Início CPU | Fim CPU | Turnaround\n");
-    fprintf(arquivo, "---------|----------|------------|-------|------------|--------|-------\n");
+    fprintf(arquivo, "Processo | Ativação | T. Serviço | T. IO | Momento IO| Início CPU | Fim CPU | Turnaround\n");
+    fprintf(arquivo, "---------|----------|------------|-------|-----------|------------|---------|-----------\n");
 
     for (int i = 0; i < total; i++) {
         Processo *p = todosProcessos[i];
@@ -64,7 +64,7 @@ static void gerarRelatorioProcessos() {
         int fimCpu = p->momentoFimExecucao;
         int turnaround = fimCpu - inicioCpu;
 
-        fprintf(arquivo, "  P%-4d |   %3d   |    %3d    |  %-5s |    %3d    |   %3d |  %3d\n", p->pid, p->momentoAtivacao, p->tempoTotal, nomeIO, inicioCpu, fimCpu, turnaround);
+        fprintf(arquivo, "  P%-4d |   %3d   |    %3d    |  %-5s |    %3d    |    %3d    |     %3d     |  %3d\n", p->pid, p->momentoAtivacao, p->tempoTotal, nomeIO, p->momentoIO, inicioCpu ,fimCpu, turnaround);
     }
 
     fprintf(arquivo, "------------------------------------------------------------\n");
@@ -116,6 +116,8 @@ void executarCiclo() {
         iniciaExecucaoNovoProcesso();
         processoEmExecucao = getProcessoEmExecucao();
     }
+    
+    registrarLinhaTempoCpu(getProcessoEmExecucao());
     //se apos iniciar execucao de novo houver processo na cpu
     if(processoEmExecucao!=NULL){
         //atualiza timers
@@ -152,11 +154,11 @@ void executarCiclo() {
      }
     
     //verifica se está na hora de boost de prioridade - evitar starvation
-    if(relogio % tempoBoostPrioridade == 0){
+    if(relogio > 0 && relogio % tempoBoostPrioridade == 0){
         boostPrioridade();
     }
 
-    registrarLinhaTempoCpu(getProcessoEmExecucao());
+    
     relogio++;
 }
 
