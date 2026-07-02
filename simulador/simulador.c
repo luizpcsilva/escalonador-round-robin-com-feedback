@@ -183,7 +183,6 @@ void executarCiclo() {
         processoEmExecucao = getProcessoEmExecucao();
     }
     
-    registrarLinhaTempoCpu(getProcessoEmExecucao());
     //se apos iniciar execucao de novo houver processo na cpu
     if(processoEmExecucao!=NULL){
         //atualiza timers
@@ -230,7 +229,7 @@ void executarCiclo() {
         boostPrioridade();
     }
 
-    
+    registrarLinhaTempoCpu(getProcessoEmExecucao());
     relogio++;
 }
 
