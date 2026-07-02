@@ -1,0 +1,8 @@
+*.o
+executar_escalonador
+venv/*
+*.txt
+*.png
+*.txt
+linha_tempo_cpu.txt
+relatorio_processos.txt
