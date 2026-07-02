@@ -14,17 +14,68 @@ static int quantum = 0;
 static int tempoBoostPrioridade = 0;
 static const char* NOMES_IO[] = {"DISCO", "FITA", "IMP", "SEM IO"};
 static Processo** arrayProcessos = NULL;
-static int linhaTempoCpu[MAX_TEMPO];
+static int* linhaTempoCpu = NULL;  
+static int tamanhoLinhaTempo = 0; 
+static int* processosTerminados = NULL; 
+static int tamanhoTerminados = 0; 
 
+static void garantirEspacoArray(int **array, int *tamanho, int instante) {
+    if (instante < *tamanho) {
+        return;
+    }
+    
+    int novoTamanho = (*tamanho) * 2;
+    if ((*tamanho) == 0) {
+        novoTamanho = 100;
+    }
+    
+    while (novoTamanho <= instante) {
+        novoTamanho *= 2;
+    }
+
+    *array = (int*) realloc(*array, sizeof(int) * novoTamanho);
+    if (*array == NULL) {
+        printf("Erro ao alocar memória!\n");
+        exit(1);
+    }
+    
+    for (int i = *tamanho; i < novoTamanho; i++) {
+        (*array)[i] = 0;
+    }
+    
+    *tamanho = novoTamanho;
+}
+
+
+static void liberarLinhaTempo() {
+    if (linhaTempoCpu != NULL) {
+        free(linhaTempoCpu);
+        linhaTempoCpu = NULL;
+        tamanhoLinhaTempo = 0;
+    }
+
+    if (processosTerminados != NULL) {
+        free(processosTerminados);
+        processosTerminados = NULL;
+        tamanhoTerminados = 0;
+    }
+}
 
 static void registrarLinhaTempoCpu(Processo *processo) {
-    if (relogio < MAX_TEMPO) {
-        if (processo != NULL) {
-            linhaTempoCpu[relogio] = processo->pid;
-        } else {
-            linhaTempoCpu[relogio] = 0; // no caso da cpu ociosa
-        }
+    garantirEspacoArray(&linhaTempoCpu, &tamanhoLinhaTempo, relogio);
+    
+    if (processo != NULL) {
+        linhaTempoCpu[relogio] = processo->pid;
+    } else {
+        linhaTempoCpu[relogio] = 0;
     }
+}
+
+static void registrarFimExecucao(Processo *processo) {
+    if (processo == NULL) return;
+    
+    garantirEspacoArray(&processosTerminados, &tamanhoTerminados, relogio);
+    processosTerminados[relogio] = processo->pid;
 }
 
 static void gerarLinhaTempoCpu() {
@@ -35,7 +86,18 @@ static void gerarLinhaTempoCpu() {
     }
 
     for (int t = 0; t < relogio; t++) {
-        fprintf(arquivo, "%d %d\n", t, linhaTempoCpu[t]);
+        int pid = 0;
+        int terminou = 0;
+        
+        if (t < tamanhoLinhaTempo) {
+            pid = linhaTempoCpu[t];
+        }
+        
+        if (t < tamanhoTerminados) {
+            terminou = processosTerminados[t];
+        }
+        
+        fprintf(arquivo, "%d %d %d\n", t, pid, terminou);
     }
 
     fclose(arquivo);
@@ -87,6 +149,10 @@ void inicializarSimulador(int quantidadeProcessos, int quantumEntrada, int durac
     totalProcessos = quantidadeProcessos;
     processosFinalizados = 0;
     quantum = quantumEntrada;
+    linhaTempoCpu = NULL;
+    tamanhoLinhaTempo = 0;
+    processosTerminados = NULL;
+    tamanhoTerminados = 0;
     bootEscalonador();
 
 
@@ -125,6 +191,7 @@ void executarCiclo() {
         //se processo acabou
         if (processoEmExecucao->tempoDecorrido == processoEmExecucao->tempoTotal) {
             processoEmExecucao->momentoFimExecucao = relogio;
+            registrarFimExecucao(processoEmExecucao);
             finalizarProcesso();
             processosFinalizados ++;
             processoEmExecucao = NULL;
@@ -137,6 +204,11 @@ void executarCiclo() {
         //acabou o quantum
         else if (processoEmExecucao->cpuTimeRestante == 0) {
             aplicaPreempsao();
+            processoEmExecucao = getProcessoEmExecucao(); 
+            if (processoEmExecucao != NULL) {
+                processoEmExecucao->cpuTimeRestante = quantum;
+            }
+            
         }
     }
     
@@ -152,7 +224,7 @@ void executarCiclo() {
      }
     
     //verifica se está na hora de boost de prioridade - evitar starvation
-    if(relogio % tempoBoostPrioridade == 0){
+    if(relogio != 0 && relogio % tempoBoostPrioridade == 0){
         boostPrioridade();
     }
 
@@ -179,6 +251,8 @@ void imprimirResumoFinal() {
 }
 
 void liberarMemoria(){
+    liberarLinhaTempo(); 
+
     //liberar memoria escalonador
     liberarMemoriaEscalonador();
 
@@ -189,5 +263,5 @@ void liberarMemoria(){
     for(int i = 0; i < totalProcessos; i++){
         destruirProcesso(arrayProcessos[i]);
     }
-    
+    free(arrayProcessos);
 }
